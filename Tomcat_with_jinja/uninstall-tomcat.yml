@@ -1,0 +1,76 @@
+- name: Uninstall tomcat9 on Ubuntu & CentOS
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: fail on unsupported versions
+      fail:
+        msg: This playbook supports only centos and ubuntu distributions
+      when:
+        - ansible_facts['distribution'] != "Ubuntu"
+        - ansible_facts['distribution'] != "CentOS"
+
+    - name: Uninstall Java on Ubuntu
+      package:
+        name: "{{ jdk_file }}"
+        update_cache: yes
+        state: absent
+      when: ansible_facts['distribution'] == "Ubuntu"
+
+    - name: Uninstall Java on CentOS
+      package:
+        name: "{{ jdk_file_centos }}"
+        update_cache: yes
+        state: absent
+      when: ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] | int >= 7
+
+    - name: Delete {{ tomcat_username }} user
+      user:
+        name: "{{ tomcat_username }}"
+        home: "{{ tomcat_home }}"
+        shell: "{{ tomcat_shell }}"
+        state: absent
+        force: yes
+
+    - name: delete tomcat tar file
+      file:
+        path: "/tmp/apache-tomcat-{{ tomcat_version }}.tar.gz"
+        state: absent
+        
+    - name: delete the unzipped tomcat tar file 
+      file:
+        path: "{{ tomcat_home }}"
+        state: absent
+        
+    - name: delete the latest dir
+      file:
+        path: "{{ tomcat_home }}/latest"
+        state: absent
+
+    - name: delete tomcat.service file on Ubuntu
+      file:
+        path: /etc/systemd/system/tomcat.service
+        state: absent
+      when: ansible_facts['distribution'] == "Ubuntu"
+      
+    - name: delete tomcat.service file on CentOS>=7
+      file:
+        path: /etc/systemd/system/tomcat.service
+        state: absent
+      when: ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] | int >= 7
+      
+    - name: delete tomcat users file
+      file:
+        path: "{{ tomcat_users_config_location }}"
+        state: absent
+      
+    - name: delete tomcat manager config
+      file:
+        path: "{{ tomcat_manager_config_location }}"
+        state: absent
+      
+    - name: delete tomcat host manager config
+      file:
+        path: "{{ tomcat_host_manager_config_location }}"
+        state: absent

@@ -1,0 +1,72 @@
+- name: Install Apache & php
+  hosts: all
+  become: yes
+  tasks:
+    - name: fail unsupported versions                                                  # This is not displaying the message. It's just showing as "skipped"
+      fail:
+        msg: "This sevrer comes under unsupported version"
+      when:
+        - ansible_facts['distribution'] != "Ubuntu"
+        - ansible_facts['distribution'] != 'CentOS'
+        - (ansible_facts['distribution'] == 'Ubuntu' and ansible_facts['distribution_major_version'] != '20')
+        - (ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] != '7')
+
+    - name: Install Apache on Ubuntu
+      apt:
+        update_cache: yes
+        name: apache2
+        state: present
+      when: (ansible_facts['distribution'] == 'Ubuntu' and ansible_facts['distribution_major_version'] == '20')
+
+    - name: Install php modules on Ubuntu
+      apt:
+        name:
+          - php
+          - libapache2-mod-php
+          - php-mysql
+        state: present
+      when: (ansible_facts['distribution'] == 'Ubuntu' and ansible_facts['distribution_major_version'] == '20')
+
+    - name: Install Apache on CentOS
+      yum:
+        name: httpd
+        state: present
+      when: (ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7')
+
+    - name: Install php modules on CentOS
+      yum:
+        name:
+          - php
+          - php-mysql
+          - php-fpm
+        state: present
+      when: (ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7')
+
+    - name: create info.php on Ubuntu and CentOS
+      copy:
+        dest: /var/www/html/info.php
+        content: |
+          <?php
+          phpinfo();
+          ?>
+      when:
+        - (ansible_facts['distribution'] == 'Ubuntu' and ansible_facts['distribution_major_version'] == '20') or (ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7')
+
+      notify:
+        - Restart Apache2
+        - Restart httpd
+
+  handlers:
+    - name: Restart Apache2
+      service:
+        name: apache2
+        state: restarted
+        enabled: yes
+      when: (ansible_facts['distribution'] == 'Ubuntu' and ansible_facts['distribution_major_version'] == '20')
+
+    - name: Restart httpd
+      service:
+        name: httpd
+        state: restarted
+        enabled: yes
+      when: (ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7')

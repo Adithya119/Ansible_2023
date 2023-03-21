@@ -1,0 +1,60 @@
+- name: Install Apache & php
+  hosts: all
+  become: yes
+  tasks:
+    - name: fail unsupported versions
+      fail:
+        msg: "This sevrer comes under unsupported version"
+      when:
+        - ansible_facts['distribution'] != "Ubuntu"
+        - ansible_facts['distribution'] != 'CentOS'
+        - (ansible_facts['distribution'] == 'Ubuntu' and ansible_facts['distribution_major_version'] != '20')
+        - (ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] != '7')
+
+    - name: Information about Node OS and packages to be installed
+      debug:
+        msg: |
+          Node OS is {{ ansible_facts['distribution'] }}
+          Package names are {{ software }} and {{ php_packages }}
+          Info location is {{ info_location}}
+
+    - name: Install Apache
+      package:
+        name: "{{ software }}"
+        state: present
+
+    - name: Install php modules
+      package:
+        name: "{{ php_packages }}"
+        state: present
+
+    - name: create info.php
+      copy:
+        dest: "{{ info_location }}"
+        content: |
+          <?php
+          phpinfo();
+		      ?>
+      when:
+        - (ansible_facts['distribution'] == 'Ubuntu' and ansible_facts['distribution_major_version'] == '20') or (ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7')
+
+      notify:
+        - Restart Apache2/httpd
+
+  handlers:
+    - name: Restart Apache2/httpd
+      service:
+        name: "{{ software }}"
+        state: restarted
+        enabled: yes
+		
+----------------------------------------------
+
+Inventory file:
+
+[webservers]
+172.31.33.214 software=apache2 php_packages='["php", "libapache2-mod-php", "php-mysql"]'
+172.31.2.86 software=httpd php_packages='["php", "php-fpm", "php-mysql"]'
+
+[webservers:vars]
+info_location=/var/www/html/info.php

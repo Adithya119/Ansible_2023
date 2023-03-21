@@ -1,0 +1,51 @@
+- name: Deploy Springboot app
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Install Java
+      package:
+        update_cache: yes
+        name: openjdk-11-jdk
+        state: present
+
+    - name: add spc user
+      user:
+        name: spc
+        password: spc
+        state: present
+
+    - name: create /usr/share/spc dir
+      file:
+        path: /usr/share/spc/
+        state: directory
+
+    - name: Download spc jar file, make "spc" the owner of the file/dir & change permissions to 0500
+      get_url:
+        url: https://referenceapplicationskhaja.s3.us-west-2.amazonaws.com/spring-petclinic-2.4.2.jar
+        dest: /usr/share/spc/spring-petclinic-2.4.2.jar
+        owner: spc
+        group: spc
+        mode: 0500
+
+    - name: copy spc.service file
+      copy:
+        src: spc.service
+        dest: /etc/systemd/system/spc.service
+      notify:
+        - daemon reload, enabled, restart spc.service   #Restart the service only when config file is modified.
+
+    - name: start spc.service
+      service:
+        name: spc.service
+        state: started
+
+
+  handlers:
+    - name: daemon reload, enabled, restart spc.service
+      systemd:
+        name: spc.service
+        daemon_reload: yes
+        enabled: yes
+        state: restarted

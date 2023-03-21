@@ -1,0 +1,84 @@
+sudo yum install httpd -y
+sudo systemctl start httpd.service
+sudo systemctl enable httpd.service
+sudo yum install php php-mysql php-fpm -y
+echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
+sudo systemctl restart httpd.service
+
+-----------------------------------------------
+
+with mistakes: *******
+
+- name: install lamp
+  hosts: centos           ##
+  become: yes
+  tasks:
+    - name: install httpd
+	  yum:
+	    name: httpd
+		state: present
+	- name: start and enable httpd     #never do this coz while running this for 2nd time, ansible will start & enable httpd even if httpd is already installed
+	  systemd:
+	    name: httpd
+		state: started
+		enabled: yes
+	- name: install php modules
+	  yum:
+	    name:
+		  - php
+		  - php-mysql
+		  - php-fpm
+		state: present
+	- name: create php.info file
+	  copy:
+	    dest: /var/www/html/info.php
+		content: |
+		  <?php 
+		  phpinfo(); 
+		  ?>
+	  notify:                                # remember notify & handlers for service restarts
+	    - restart httpd
+  handlers:
+	- name: restart httpd
+	  systemd:
+	    name: httpd
+		state: restart
+------------------------------------------------
+
+
+
+Without mistakes: ***********
+
+
+- name: install lamp
+  hosts: centos           ##
+  become: yes
+  tasks:
+    - name: install httpd
+	  yum:
+	    name: httpd
+		state: present
+	- name: install php modules
+	  yum:
+	    name:
+		  - php
+		  - php-mysql
+		  - php-fpm
+		state: present
+	- name: create php.info file
+	  copy:
+	    dest: /var/www/html/info.php
+		content: |
+		  <?php 
+		  phpinfo(); 
+		  ?>
+	  notify:                                # remember notify & handlers for service restarts
+	    - restart httpd
+  handlers:
+	- name: restart httpd
+	  service:
+	    name: httpd
+		state: restart
+        enabled: yes
+        
+----------------------------------

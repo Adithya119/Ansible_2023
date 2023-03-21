@@ -1,0 +1,139 @@
+## This is similar to tomcat9.yml but we have used group_vars and host_vars & fail module
+
+- name: Install tomcat9 with group_vars & host_vars
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: fail on unsupported versions
+      fail:
+        msg: This playbook supports only centos and ubuntu distributions
+      when:
+        - ansible_facts['distribution'] != "Ubuntu"
+        - ansible_facts['distribution'] != "CentOS"
+
+    - name: Install Java   # removed when condition because we used "package" module & we used diff java_package for diff OS types as mentioned in group_vars & host_vars respectively 
+      package:
+        name: "{{ jdk_file }}"
+        update_cache: yes
+        state: present
+      
+    - name: Add {{ tomcat_username }} user
+      user:
+        name: "{{ tomcat_username }}"
+        home: "{{ tomcat_home }}"
+        shell: "{{ tomcat_shell }}"
+        state: present
+
+        #- name: check if latest dir is present    ## stat module
+        #stat:
+        #path: "{{ tomcat_home }}/latest"
+        #register: tomcat_latest_dir
+
+    - name: download tomcat tar file   ## this will always change after a server reboot because dest is in /tmp/
+      get_url:
+        url: "https://archive.apache.org/dist/tomcat/tomcat-9/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
+        dest: "/tmp/apache-tomcat-{{ tomcat_version }}.tar.gz"
+        #when: not tomcat_latest_dir.stat.exists
+
+    - name: unzip the tomcat tar file      ## importance of stat module realized in the tasks from here on
+      unarchive:
+        src: "/tmp/apache-tomcat-{{ tomcat_version }}.tar.gz"
+        dest: "{{ tomcat_home }}"
+        remote_src: yes
+        creates: "{{ tomcat_home }}/apache-tomcat-{{ tomcat_version }}"
+        #when: not tomcat_latest_dir.stat.exists
+
+    - name: create a symbolic link named latest that points to tomcat installation directory
+      file:
+        state: link
+        src: "{{ tomcat_home }}/apache-tomcat-{{ tomcat_version }}"
+        dest: "{{ tomcat_home }}/latest"
+        #when: not tomcat_latest_dir.stat.exists
+
+    - name: change ownership of "{{ tomcat_home }}" to "{{ tomcat_username }}"
+      file:
+        owner: "{{ tomcat_username }}"
+        group: "{{ tomcat_username }}"
+        path: "{{ tomcat_home }}"
+        state: directory
+        recurse: yes
+        #when: not tomcat_latest_dir.stat.exists
+
+    - name: find all .sh files under the directory /opt/tomcat/latest/bin/
+      find:
+        path: "{{ tomcat_home }}/latest/bin/"
+        pattern: '*.sh'
+      register: output
+      #when: not tomcat_latest_dir.stat.exists
+
+    - name: grep for the field 'path' in the registered "output" and store the result in the newly created ansible fact named sh_files
+      set_fact:
+        sh_files: "{{ output.files | map(attribute = 'path') | list }}"
+        #when: not tomcat_latest_dir.stat.exists
+
+    - name: print sh_files (contents of newly created ansible fact)
+      debug:
+        msg: "{{ sh_files }}"
+        #when: not tomcat_latest_dir.stat.exists
+
+    - name: chmod +x for all shell files
+      file:
+        path: "{{ item }}"
+        mode: 0751
+      with_items: "{{ sh_files }}"
+      #when: not tomcat_latest_dir.stat.exists
+
+    - name: copy tomcat.service file
+      copy:
+        src: files/tomcat.service
+        dest: /etc/systemd/system/tomcat.service
+      when: ansible_facts['distribution'] == "Ubuntu"
+      notify:
+        - daemon reload enable and restart tomcat service
+
+    - name: copy tomcat.service file
+      copy:
+        src: files/tomcat.service-centos
+        dest: /etc/systemd/system/tomcat.service
+      when: ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] | int >= 7
+      notify:
+        - daemon reload enable and restart tomcat service
+
+    - name: start the tomcat service     # Note that tomcat service will be untouched if it's already running. No handler is required for this.
+      systemd:
+        name: tomcat.service
+        state: started
+      notify:
+        - daemon reload enable and restart tomcat service
+
+    - name: copy tomcat users file
+      ansible.builtin.copy:
+        src: files/tomcat-users.xml
+        dest: "{{ tomcat_users_config_location }}"
+      notify:
+        - daemon reload enable and restart tomcat service
+
+    - name: copy tomcat manager config
+      ansible.builtin.copy:
+        src: files/manager-context.xml
+        dest: "{{ tomcat_manager_config_location }}"
+      notify:
+        - daemon reload enable and restart tomcat service
+
+    - name: copy tomcat host manager config
+      ansible.builtin.copy:
+        src: files/host-manager-context.xml
+        dest: "{{ tomcat_host_manager_config_location }}"
+      notify:
+        - daemon reload enable and restart tomcat service
+
+
+  handlers:
+    - name: daemon reload enable and restart tomcat service
+      systemd:
+        name: tomcat.service
+        daemon_reload: yes
+        enabled: yes
+        state: restarted

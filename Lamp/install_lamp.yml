@@ -15,6 +15,7 @@ with mistakes: *******
   tasks:
     - name: install httpd
 	    yum:
+			  update_cache: yes
 	      name: httpd
 		    state: present
 	  - name: start and enable httpd     #never do this coz while running this for 2nd time, ansible will start & enable httpd even if httpd is already installed
@@ -56,6 +57,7 @@ Without mistakes: ***********
   tasks:
     - name: install httpd
 	    yum:
+			  update_cache: yes
 	      name: httpd
 		    state: present
 	  - name: install php modules
@@ -78,7 +80,7 @@ Without mistakes: ***********
 	- name: restart httpd
 	  service:
 	    name: httpd
-		  state: restart
+		  state: restarted    # not restart
       enabled: yes
         
 ----------------------------------

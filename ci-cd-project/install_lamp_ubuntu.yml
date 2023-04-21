@@ -1,0 +1,32 @@
+- name: install lamp
+  hosts: all           ##
+  become: yes
+  tasks:
+    - name: install apache2
+      apt:
+        update_cache: yes
+        name: apache2
+        state: present
+    - name: install php modules
+      apt:
+        name:
+        - php
+        - php-mysql
+        - php-fpm
+        state: present
+    - name: create php.info file
+      copy:
+        dest: /var/www/html/info.php
+        content: |
+          <?php 
+          phpinfo(); 
+          ?>
+      notify:                                # remember notify & handlers for service restarts
+      - restart apache2
+  
+  handlers:
+  - name: restart apache2
+    service:
+      name: apache2
+      state: restarted
+      #enabled: yes

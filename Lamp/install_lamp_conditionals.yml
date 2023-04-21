@@ -2,9 +2,9 @@
   hosts: all
   become: yes
   tasks:
-    - name: fail unsupported versions                                                  # This is not displaying the message. It's just showing as "skipped"
+    - name: fail unsupported versions                                # This is not displaying the message. It's just showing as "skipped"
       fail:
-        msg: "This sevrer comes under unsupported version"
+        msg: "This server comes under unsupported version"
       when:
         - ansible_facts['distribution'] != "Ubuntu"
         - ansible_facts['distribution'] != 'CentOS'

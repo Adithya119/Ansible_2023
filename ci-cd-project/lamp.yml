@@ -1,0 +1,90 @@
+- name: install lamp stack on Ubuntu & CentOS servers
+  hosts: all
+  become: yes
+  tasks:
+  
+  - name: apt update and install apache2
+    apt:
+      name: apache2
+      state: present
+      update_cache: true             # true/false
+    when: ansible_facts['distribution'] == 'Ubuntu'     # conditionals     # notes at bottom
+  
+  - name: install php libapache2-mod-php php-mysql
+    apt: 
+      name:
+      - php
+      - libapache2-mod-php
+      - php-mysql
+      state: present
+    when: ansible_facts['distribution'] == 'Ubuntu'
+
+  - name: yum update and install httpd
+    yum:
+      name: httpd
+      state: present
+      update_cache: true             
+    when: ansible_facts['distribution'] == 'CentOS'
+  
+  - name: install php libapache2-mod-php php-mysql
+    yum: 
+      name:
+      - php
+      - libapache2-mod-php
+      - php-mysql
+      state: present
+    when: ansible_facts['distribution'] == 'CentOS'
+  
+  - name: create info.php             # echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
+    copy:
+      dest: /var/www/html/info.php       # Creates the file if it does not exist.
+      content: |
+        <?php
+        phpinfo(); 
+        ?>
+    notify:
+    - restart apache2      # use of handlers
+    - restart httpd
+  
+  handlers:
+  - name: restart apache2
+    service:
+      name: apache2
+      enabled: true    ##
+      state: restarted
+    when: ansible_facts['distribution'] == 'Ubuntu'
+
+  handlers:
+  - name: restart httpd
+    service:
+      name: httpd
+      enabled: true    ##
+      state: restarted
+    when: ansible_facts['distribution'] == 'CentOS'
+  
+
+
+# -----------
+# for CentOs/CentOS, you should start the installed services first. Using Conditionals:
+# - name: Ensure apache is running
+#      service:
+#        name: httpd
+#        state: started
+    when: ansible_facts['distribution'] == "CentOS"
+
+# -----------
+
+# file module: -
+# - name: Remove file (delete file)
+#   file:
+#     path: /etc/foo.txt
+#     state: absent
+
+# -----------
+
+
+# Diff name of apache for installing apache on Ubuntu & CentOS: -
+
+# for Ubuntu/Debian --> sudo apt install apache2 -y
+# for CentOS --> sudo yum install httpd -y
+# Hence, use conditionals

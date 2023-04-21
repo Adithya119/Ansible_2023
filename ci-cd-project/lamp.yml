@@ -8,7 +8,7 @@
       name: apache2
       state: present
       update_cache: true                                       # true/false
-    when: ansible_facts['ansible_distribution'] == 'Ubuntu'     # conditionals     # refer Notes file
+    when: ansible_facts['distribution'] == 'Ubuntu'     # conditionals     # refer Notes file
   
   - name: install php libapache2-mod-php php-mysql
     apt: 
@@ -17,30 +17,30 @@
       - libapache2-mod-php
       - php-mysql
       state: present
-    when: ansible_facts['ansible_distribution'] == 'Ubuntu'
+    when: ansible_facts['distribution'] == 'Ubuntu'
 
   - name: yum update and install httpd
     yum:
       name: httpd
       state: present
       update_cache: true             
-    when: ansible_facts['ansible_distribution'] == 'RedHat'
+    when: ansible_facts['distribution'] == 'RedHat'
 
   - name: start & enable httpd
     service: 
       name: httpd
-      state: start
+      state: started
       enabled: true
-    when: ansible_facts['ansible_distribution'] == 'RedHat'
+    when: ansible_facts['distribution'] == 'RedHat'
   
   - name: install php libapache2-mod-php php-mysql
     yum: 
       name:
-      - php
-      - libapache2-mod-php
-      - php-mysql
+        - php
+        - php-cli
+        - php-mysqlnd
       state: present
-    when: ansible_facts['ansible_distribution'] == 'RedHat'
+    when: ansible_facts['distribution'] == 'RedHat'
   
   - name: create info.php             # echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
     copy:
@@ -58,10 +58,10 @@
     service:
       name: apache2
       state: restarted
-    when: ansible_facts['ansible_distribution'] == 'Ubuntu'
+    when: ansible_facts['distribution'] == 'Ubuntu'
 
   - name: restart httpd
     service:
       name: httpd
       state: restarted
-    when: ansible_facts['ansible_distribution'] == 'RedHat'
+    when: ansible_facts['distribution'] == 'RedHat'

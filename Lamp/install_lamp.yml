@@ -18,7 +18,7 @@ with mistakes: *******
 			  update_cache: yes
 	      name: httpd
 		    state: present
-	  - name: start and enable httpd     #never do this coz while running this for 2nd time, ansible will start & enable httpd even if httpd is already installed
+	  - name: start and enable httpd     # do this step for RedHat / CentOS 
 	    systemd:
 	      name: httpd
 		    state: started

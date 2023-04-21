@@ -5,7 +5,16 @@
 #      service:
 #        name: httpd
 #        state: started
+#        enabled: true
 #    when: ansible_facts['ansible_distribution'] == "RedHat"
+
+# started/stopped are idempotent actions that will not run commands unless necessary.
+
+# Idempotence is the property of certain operations in mathematics and computer science whereby they can be applied - 
+# multiple times without changing the result beyond the initial application.
+
+
+
 
 # -----------
 

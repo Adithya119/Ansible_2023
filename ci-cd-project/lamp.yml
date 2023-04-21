@@ -1,4 +1,4 @@
-- name: install lamp stack on Ubuntu & CentOS servers
+- name: install lamp stack on Ubuntu & RedHat servers
   hosts: all
   become: yes
   tasks:
@@ -8,7 +8,7 @@
       name: apache2
       state: present
       update_cache: true             # true/false
-    when: ansible_facts['distribution'] == 'Ubuntu'     # conditionals     # notes at bottom
+    when: ansible_facts['ansible_distribution'] == 'Ubuntu'     # conditionals     # notes at bottom
   
   - name: install php libapache2-mod-php php-mysql
     apt: 
@@ -17,14 +17,14 @@
       - libapache2-mod-php
       - php-mysql
       state: present
-    when: ansible_facts['distribution'] == 'Ubuntu'
+    when: ansible_facts['ansible_distribution'] == 'Ubuntu'
 
   - name: yum update and install httpd
     yum:
       name: httpd
       state: present
       update_cache: true             
-    when: ansible_facts['distribution'] == 'CentOS'
+    when: ansible_facts['ansible_distribution'] == 'RedHat'
   
   - name: install php libapache2-mod-php php-mysql
     yum: 
@@ -33,7 +33,7 @@
       - libapache2-mod-php
       - php-mysql
       state: present
-    when: ansible_facts['distribution'] == 'CentOS'
+    when: ansible_facts['ansible_distribution'] == 'RedHat'
   
   - name: create info.php             # echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
     copy:
@@ -52,7 +52,7 @@
       name: apache2
       enabled: true    ##
       state: restarted
-    when: ansible_facts['distribution'] == 'Ubuntu'
+    when: ansible_facts['ansible_distribution'] == 'Ubuntu'
 
   handlers:
   - name: restart httpd
@@ -60,17 +60,17 @@
       name: httpd
       enabled: true    ##
       state: restarted
-    when: ansible_facts['distribution'] == 'CentOS'
+    when: ansible_facts['ansible_distribution'] == 'RedHat'
   
 
 
 # -----------
-# for CentOs/CentOS, you should start the installed services first. Using Conditionals:
+# for RedHat/RedHat, you should start the installed services first. Using Conditionals:
 # - name: Ensure apache is running
 #      service:
 #        name: httpd
 #        state: started
-    when: ansible_facts['distribution'] == "CentOS"
+#    when: ansible_facts['ansible_distribution'] == "RedHat"
 
 # -----------
 
@@ -83,8 +83,8 @@
 # -----------
 
 
-# Diff name of apache for installing apache on Ubuntu & CentOS: -
+# Diff name of apache for installing apache on Ubuntu & RedHat: -
 
 # for Ubuntu/Debian --> sudo apt install apache2 -y
-# for CentOS --> sudo yum install httpd -y
+# for RedHat --> sudo yum install httpd -y
 # Hence, use conditionals

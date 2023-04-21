@@ -2,7 +2,7 @@
   hosts: all           ##
   become: yes
   tasks:
-    - name: install httpd
+    - name: install apache2
 	    package:
         update_cache: yes
 	      name: apache2
@@ -22,10 +22,10 @@
 		      phpinfo(); 
 		      ?>
 	    notify:                                # remember notify & handlers for service restarts
-	    - restart httpd
+	    - restart apache2
   handlers:
-	- name: restart httpd
+	- name: restart apache2
 	  service:
 	    name: apache2
 		  state: restarted
-      enabled: yes
+      #enabled: yes

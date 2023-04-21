@@ -42,6 +42,7 @@
       state: present
     when: ansible_facts['distribution'] == 'RedHat'
 
+  
   - name: create info.php             # echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
     copy:
       dest: /var/www/html/info.php       # Creates the file if it does not exist.

@@ -1,0 +1,25 @@
+# -----------
+# for RedHat/RedHat, you should start and enable the installed services first. Using Conditionals: -
+
+# - name: Ensure apache is running
+#      service:
+#        name: httpd
+#        state: started
+#    when: ansible_facts['ansible_distribution'] == "RedHat"
+
+# -----------
+
+# file module: -
+# - name: Remove file (delete file)
+#   file:
+#     path: /etc/foo.txt
+#     state: absent
+
+# -----------
+
+
+# Diff name of apache for installing apache on Ubuntu & RedHat: -
+
+# for Ubuntu/Debian --> sudo apt install apache2 -y
+# for RedHat --> sudo yum install httpd -y
+# Hence, use conditionals

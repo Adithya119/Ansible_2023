@@ -28,4 +28,5 @@
 	  service:
 	    name: apache2
 		  state: restarted
-      #enabled: yes
+      
+# enabled: true  -->  this is not required in ubuntu coz it's automatically taken care of

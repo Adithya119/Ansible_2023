@@ -7,8 +7,8 @@
     apt:
       name: apache2
       state: present
-      update_cache: true             # true/false
-    when: ansible_facts['ansible_distribution'] == 'Ubuntu'     # conditionals     # notes at bottom
+      update_cache: true                                       # true/false
+    when: ansible_facts['ansible_distribution'] == 'Ubuntu'     # conditionals     # refer Notes file
   
   - name: install php libapache2-mod-php php-mysql
     apt: 
@@ -24,6 +24,13 @@
       name: httpd
       state: present
       update_cache: true             
+    when: ansible_facts['ansible_distribution'] == 'RedHat'
+
+  - name: start & enable httpd
+    service: 
+      name: httpd
+      state: start
+      enabled: true
     when: ansible_facts['ansible_distribution'] == 'RedHat'
   
   - name: install php libapache2-mod-php php-mysql
@@ -43,48 +50,18 @@
         phpinfo(); 
         ?>
     notify:
-    - restart apache2      # use of handlers
+    - restart apache2      # notify
     - restart httpd
   
-  handlers:
+  handlers:                   # use of handlers
   - name: restart apache2
     service:
       name: apache2
-      enabled: true    ##
       state: restarted
     when: ansible_facts['ansible_distribution'] == 'Ubuntu'
 
-  handlers:
   - name: restart httpd
     service:
       name: httpd
-      enabled: true    ##
       state: restarted
     when: ansible_facts['ansible_distribution'] == 'RedHat'
-  
-
-
-# -----------
-# for RedHat/RedHat, you should start the installed services first. Using Conditionals:
-# - name: Ensure apache is running
-#      service:
-#        name: httpd
-#        state: started
-#    when: ansible_facts['ansible_distribution'] == "RedHat"
-
-# -----------
-
-# file module: -
-# - name: Remove file (delete file)
-#   file:
-#     path: /etc/foo.txt
-#     state: absent
-
-# -----------
-
-
-# Diff name of apache for installing apache on Ubuntu & RedHat: -
-
-# for Ubuntu/Debian --> sudo apt install apache2 -y
-# for RedHat --> sudo yum install httpd -y
-# Hence, use conditionals

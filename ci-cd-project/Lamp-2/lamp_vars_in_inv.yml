@@ -1,9 +1,14 @@
-# introducing variables 
+# *************** Refer Notes file before reading the code here ***************
 
 - name: install lamp stack on Ubuntu & RedHat servers
   hosts: webservers         ##
   become: yes
   tasks:
+  - name: printing the values of variables      # debug module
+    debug:
+      msg:
+      - "package_name is {{ package_name }}"
+      - "php file path is {{ php_path }}" 
 
   - name: apt update and install apache2/httpd
     apt:
@@ -14,10 +19,7 @@
 
   - name: install php, libapache2-mod-php & php-mysql on Ubuntu servers
     apt:
-      name:
-      - php
-      - libapache2-mod-php
-      - php-mysql
+      name: "{{ php_packages }}"
       state: present
     when: ansible_facts['distribution'] == 'Ubuntu'
 
@@ -37,13 +39,9 @@
 
   - name: install php, php-cli & php-mysqlnd on RedHat servers
     yum:
-      name:
-        - php
-        - php-cli
-        - php-mysqlnd
+      name: "{{ php_packages }}"
       state: present
     when: ansible_facts['distribution'] == 'RedHat'
-
   
   - name: create info.php             
     copy:

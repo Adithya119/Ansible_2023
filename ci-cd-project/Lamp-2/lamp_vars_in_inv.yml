@@ -1,0 +1,62 @@
+# introducing variables 
+
+- name: install lamp stack on Ubuntu & RedHat servers
+  hosts: webservers         ##
+  become: yes
+  tasks:
+
+  - name: apt update and install apache2/httpd
+    apt:
+      name: "{{ package_name }}"
+      state: present
+      update_cache: true                                       
+    when: ansible_facts['distribution'] == 'Ubuntu'     
+
+  - name: install php, libapache2-mod-php & php-mysql on Ubuntu servers
+    apt:
+      name:
+      - php
+      - libapache2-mod-php
+      - php-mysql
+      state: present
+    when: ansible_facts['distribution'] == 'Ubuntu'
+
+  - name: yum update and install httpd
+    yum:
+      name: "{{ package_name }}"
+      state: present
+      update_cache: true
+    when: ansible_facts['distribution'] == 'RedHat'
+
+  - name: start & enable httpd
+    service:
+      name: "{{ package_name }}"
+      state: started  
+      enabled: true
+    when: ansible_facts['distribution'] == 'RedHat'
+
+  - name: install php, php-cli & php-mysqlnd on RedHat servers
+    yum:
+      name:
+        - php
+        - php-cli
+        - php-mysqlnd
+      state: present
+    when: ansible_facts['distribution'] == 'RedHat'
+
+  
+  - name: create info.php             
+    copy:
+      dest: "{{ info.php_path }}"   
+      content: |
+        <?php
+        phpinfo();
+        ?>
+    notify:
+    - restart apache2/httpd      
+
+  handlers:                       # removing the 2nd handler with introduction of {{'package_name'}} variable
+  - name: restart apache2/httpd
+    service:
+      name: "{{ package_name }}"
+      state: restarted

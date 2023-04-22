@@ -9,6 +9,7 @@
       msg:
       - "package_name is {{ package_name }}"
       - "php file path is {{ php_path }}" 
+      - "php packages are {{ php_packages }}"
 
   - name: apt update and install apache2/httpd
     apt:

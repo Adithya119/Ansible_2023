@@ -1,0 +1,45 @@
+# 
+- name: install lamp stack on Ubuntu & RedHat servers
+  hosts: webservers         ##
+  become: yes
+  tasks:
+  - name: printing the values of variables      # debug module
+    debug:
+      msg:
+      - "package_name is {{ package_name }}"
+      - "php file path is {{ php_path }}" 
+      - "php packages are {{ php_packages }}"
+
+  - name: install apache2/httpd
+    package:               # package module removes when conditionals
+      name: "{{ package_name }}"
+      state: present
+      update_cache: true                                            
+
+  - name: install php packages
+    package:
+      name: "{{ php_packages }}"
+      state: present
+
+  - name: start & enable httpd
+    service:
+      name: "{{ package_name }}"
+      state: started  
+      enabled: true
+    when: ansible_facts['distribution'] == 'RedHat'
+  
+  - name: create info.php             
+    copy:
+      dest: "{{ php_path }}"   
+      content: |
+        <?php
+        phpinfo();
+        ?>
+    notify:
+    - restart apache2/httpd      
+
+  handlers:                       # removing the 2nd handler with introduction of {{'package_name'}} variable
+  - name: restart apache2/httpd
+    service:
+      name: "{{ package_name }}"
+      state: restarted

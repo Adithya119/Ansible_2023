@@ -1,0 +1,2 @@
+1) Introducing package module which eliminates the need for when conditionals because with the use of package module, Ansible knows about the underlying package manager.
+2) with package module, code gets shorter.

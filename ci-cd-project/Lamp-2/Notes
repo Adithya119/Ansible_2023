@@ -1,4 +1,6 @@
 Introducing variables, debug module
-** Too many variables in hosts file --> looks disgusting
+** Too many variables in hosts file (looks disgusting). 
+
+Also in this Folder, we did not use the package module which makes code lengthy.
 
 Lamp-2 folder shows how NOT to write code.

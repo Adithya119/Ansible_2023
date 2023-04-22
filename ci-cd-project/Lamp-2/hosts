@@ -3,4 +3,4 @@
 172.31.38.127  package_name=httpd
 
 [webservers:vars]           ##
-info.php_path=/var/www/html/info.php
+php_path=/var/www/html/info.php

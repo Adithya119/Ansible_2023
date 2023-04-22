@@ -47,7 +47,7 @@
   
   - name: create info.php             
     copy:
-      dest: "{{ info.php_path }}"   
+      dest: "{{ php_path }}"   
       content: |
         <?php
         phpinfo();

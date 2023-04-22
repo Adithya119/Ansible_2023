@@ -11,7 +11,7 @@
       - "php packages are {{ php_packages }}"
 
   - name: install apache2/httpd
-    package:               # package module removes when conditionals
+    package:               # package module doesn't need when conditionals
       name: "{{ package_name }}"
       state: present
       update_cache: true                                            
@@ -26,7 +26,7 @@
       name: "{{ package_name }}"
       state: started  
       enabled: true
-    when: ansible_facts['distribution'] == 'RedHat'
+    when: ansible_facts['distribution'] == 'RedHat'     # when conditional needed only here
   
   - name: create info.php             
     copy:

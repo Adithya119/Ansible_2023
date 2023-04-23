@@ -55,7 +55,7 @@
       find:
         path: "{{ tomcat_home }}/latest/bin/"
         pattern: '*.sh'
-      register: output
+      register: output           # registering variables
 
     - name: grep for the field 'path' in the registered "output" and store the result in the newly created ansible fact named sh_files
       set_fact:

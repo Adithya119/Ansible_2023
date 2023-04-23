@@ -45,3 +45,8 @@
       group: tomcat
       recurse: true        # applies this ownership recursively to all files inside the directory.
 
+  - name: 
+    find:
+      path: /opt/tomcat/latest/bin/                # give paths if there's more than 1 dir to search
+      patterns: "*.sh"
+    register: output_sh_files                    # registering variables

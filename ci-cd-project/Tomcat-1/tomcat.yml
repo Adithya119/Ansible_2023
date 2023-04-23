@@ -68,4 +68,5 @@
   - name: give execute permissions for all .sh files 
     file:
       path: "{{ items }}"        # you can also give name
+      mode: 0751
     with_items: "{{ sh_files }}"

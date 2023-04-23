@@ -1,0 +1,19 @@
+- name: uninstall Lamp from Ubuntu & RedHat servers
+  hosts: webservers
+  become: yes
+  tasks:
+
+  - name: delete {{ php_path }} file
+    file:
+      path: "{{ php_path }}"
+      state: absent
+
+  - name: uninstall apache2/httpd
+    package:
+      name: "{{ package_name }}"
+      state: absent
+  
+  - name: uninstall php packages
+    package:
+      name: "{{ php_packages }}"
+      state: absent

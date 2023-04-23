@@ -20,7 +20,7 @@
         state: present
       when: ansible_facts['distribution'] == "Ubuntu"
 
-    - name: Install Java on Ubuntu
+    - name: Install Java on CentOS
       package:
         update_cache: yes
         name: "{{ java_package_centos }}"

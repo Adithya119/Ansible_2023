@@ -23,7 +23,7 @@
         name: "{{ tomcat_username }}"
         home: "{{ tomcat_home }}"
         shell: "{{ tomcat_shell }}"
-        state: present
+        state: present   # defaults to present
 
     - name: download tomcat tar file
       get_url:

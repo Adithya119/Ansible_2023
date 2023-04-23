@@ -1,0 +1,51 @@
+- name: Uninstall tomcat-9 on Ubuntu servers
+  hosts: all
+  become: yes
+  tasks:
+    - name: Uninstall Java on Ubuntu
+      package:
+        name: openjdk-11-jdk
+        state: absent
+
+    - name: delete tomcat user
+      user:
+        name: tomcat
+        home: /opt/tomcat
+        shell: /bin/false
+        state: absent
+        force: yes
+
+    - name: delete tomcat tar file
+      file:
+        path: /tmp/apache-tomcat-9.0.74.tar.gz
+        state: absent
+        
+    - name: delete the unzipped tomcat tar file 
+      file:
+        path: /opt/tomcat
+        state: absent
+        
+    - name: delete the latest dir
+      file:
+        path: /opt/tomcat/latest
+        state: absent
+
+    - name: delete tomcat.service file on Ubuntu
+      file:
+        path: /etc/systemd/system/tomcat.service
+        state: absent
+         
+    - name: delete tomcat users file
+      file:
+        path: /opt/tomcat/latest/conf/tomcat-users.xml
+        state: absent
+      
+    - name: delete tomcat manager config
+      file:
+        path: /opt/tomcat/latest/webapps/manager/META-INF/context.xml
+        state: absent
+      
+    - name: delete tomcat host manager config
+      file:
+        path: /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
+        state: absent

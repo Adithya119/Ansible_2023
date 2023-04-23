@@ -1,3 +1,19 @@
+# To uninstall OpenJDK: - 
+
+# 1) First check which OpenJDK packages are installed.
+# sudo dpkg --list | grep -i jdk
+
+# 2) To remove openjdk:
+# sudo apt-get purge openjdk*
+
+# 3) Uninstall OpenJDK related packages.
+# sudo apt-get purge icedtea-* openjdk-*
+
+# 4) Check that all OpenJDK packages have been removed.
+# sudo dpkg --list | grep -i jdk
+
+
+
 - name: Uninstall tomcat-9 on Ubuntu servers
   hosts: all
   become: yes

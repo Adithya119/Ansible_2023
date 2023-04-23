@@ -45,8 +45,14 @@
       group: tomcat
       recurse: true        # applies this ownership recursively to all files inside the directory.
 
+
+# next 4 steps is to give execute permissions to .sh files under /opt/tomcat/latest/bin/
   - name: 
-    find:
+    find: find .sh files under /opt/tomcat/latest/bin/
       path: /opt/tomcat/latest/bin/                # give paths if there's more than 1 dir to search
       patterns: "*.sh"
     register: output_sh_files                    # registering variables
+
+  - name: print the contents of output_sh_files 
+    debug:
+      msg: "{{ output_sh_files }}"

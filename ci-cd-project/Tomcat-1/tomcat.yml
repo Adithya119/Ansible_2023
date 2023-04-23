@@ -45,8 +45,3 @@
       group: tomcat
       recurse: true        # applies this ownership recursively to all files inside the directory.
 
-  - name: give execute permissions for all .sh files under /opt/tomcat/latest/bin/
-    file:
-      path: /opt/tomcat/apache-tomcat-9.0.74/bin/.*sh
-      mode: 0751     # or --> u+x,g+x,o+x
-      state: file

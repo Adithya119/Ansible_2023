@@ -3,6 +3,8 @@
 - name: Install tomcat-9
   hosts: all
   become: yes
+  vars:
+    tomcat_home: /opt/tomcat
   tasks:
   - name: apt update & install java
     package:
@@ -48,9 +50,9 @@
 
 # next 4 steps is to give execute permissions to .sh files under /opt/tomcat/latest/bin/
   - name: 
-    find: find .sh files under /opt/tomcat/latest/bin/
-      paths: /opt/tomcat/latest/bin               # give paths if there's more than 1 dir to search
-      pattern: '*.sh'                              # give patterns if there's more than 1 pattern
+    find: find .sh files under /opt/tomcat/latest/bin
+      path: "{{ tomcat_home }}/opt/tomcat/latest/bin"              # give paths if there's more than 1 dir to search
+      pattern: "*.sh"                             # give patterns if there's more than 1 pattern
     register: output                    # storing the result in a variable
 
   # from the find command output, we are grepping for files/path names only & storing it as a fact

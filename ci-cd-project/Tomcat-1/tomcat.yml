@@ -51,8 +51,13 @@
     find: find .sh files under /opt/tomcat/latest/bin/
       path: /opt/tomcat/latest/bin/                # give paths if there's more than 1 dir to search
       patterns: "*.sh"
-    register: output_sh_files                    # registering variables
+    register: output                    # storing the result in a variable
 
-  - name: print the contents of output_sh_files 
+  # from the find command output, we are grepping for files/path names only & storing it as a fact
+  - name: set your own fact so that you can grep for the required information
+    set_fact:
+    sh_files: "{{ output.files | map(attribute = 'path') | list }}"                  # sh_files is the fact's name
+
+  - name: print the .sh files (contents of newly created ansible fact)
     debug:
-      msg: "{{ output_sh_files }}"
+      msg: "{{ sh_files }}"    # file names will be printed

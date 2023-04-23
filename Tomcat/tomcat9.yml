@@ -55,11 +55,11 @@
       find:
         path: "{{ tomcat_home }}/latest/bin/"
         pattern: '*.sh'
-      register: output           # registering variables
+      register: output           # storing the result in a variable
 
     - name: grep for the field 'path' in the registered "output" and store the result in the newly created ansible fact named sh_files
       set_fact:
-        sh_files: "{{ output.files | map(attribute = 'path') | list }}"
+        sh_files: "{{ output.files | map(attribute = 'path') | list }}"     # sh_files is the fact's name
 
     - name: print sh_files (contents of newly created ansible fact)
       debug:

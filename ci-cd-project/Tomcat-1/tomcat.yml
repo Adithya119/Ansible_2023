@@ -63,3 +63,9 @@
   - name: print the .sh files (contents of newly created ansible fact)
     debug:
       msg: "{{ sh_files }}"    # file names will be printed
+
+  # because there's more than 1 file, use loop logic      *******  v.imp ******
+  - name: give execute permissions for all .sh files 
+    file:
+      path: "{{ items }}"        # you can also give name
+    with_items: "{{ sh_files }}"

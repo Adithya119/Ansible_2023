@@ -25,7 +25,7 @@
         shell: "{{ tomcat_shell }}"
         state: present   # defaults to present
 
-    - name: download tomcat tar file
+    - name: download tomcat tar file               ## 
       get_url:
         url: "https://archive.apache.org/dist/tomcat/tomcat-9/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
         dest: "/tmp/apache-tomcat-{{ tomcat_version }}.tar.gz"
@@ -35,7 +35,7 @@
         src: "/tmp/apache-tomcat-{{ tomcat_version }}.tar.gz"
         dest: "{{ tomcat_home }}"
         remote_src: yes
-        creates: "/opt/tomcat/apache-tomcat-{{ tomcat_version }}"
+        creates: "/opt/tomcat/apache-tomcat-{{ tomcat_version }}"   # if this file is already found, then this task is skipped.
 
     - name: create a symbolic link named latest that points to tomcat installation directory
       file:

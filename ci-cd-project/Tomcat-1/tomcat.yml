@@ -49,7 +49,7 @@
 # next 4 steps is to give execute permissions to .sh files under /opt/tomcat/latest/bin/
   - name: 
     find: find .sh files under /opt/tomcat/latest/bin/
-      path: /opt/tomcat/latest/bin/                # give paths if there's more than 1 dir to search
+      paths: /opt/tomcat/latest/bin/                # give paths if there's more than 1 dir to search
       pattern: '*.sh'                              # give patterns if there's more than 1 pattern
     register: output                    # storing the result in a variable
 

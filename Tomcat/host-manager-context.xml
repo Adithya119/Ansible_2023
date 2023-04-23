@@ -19,3 +19,6 @@
   <Valve className="org.apache.catalina.valves.RemoteAddrValve"
          allow=".*" />
   <Manager sessionAttributeValueClassNameFilter="java\.lang\.(?:Boolean|Integer|Long|Number|String)|org\.apache\.catalina\.filters\.CsrfPreventionFilter\$LruCache(?:\$1)?|java\.util\.(?:Linked)?HashMap"/>
+
+<!-- To enable access to the web interface from anywhere, you should not have anything inside the allow field above.
+-->

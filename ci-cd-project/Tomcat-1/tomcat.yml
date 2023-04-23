@@ -58,7 +58,7 @@
   # from the find command output, we are grepping for files/path names only & storing it as a fact
   - name: set your own fact so that you can grep for the required information
     set_fact:
-    sh_files: "{{ output.files | map(attribute = 'path') | list }}"                  # sh_files is the fact's name
+      sh_files: "{{ output.files | map(attribute = 'path') | list }}"                  # sh_files is the fact's name
 
   - name: print the .sh files (contents of newly created ansible fact)
     debug:

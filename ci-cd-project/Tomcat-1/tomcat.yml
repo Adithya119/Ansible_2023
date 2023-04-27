@@ -17,9 +17,10 @@
       shell: /bin/false
 
   - name: download tomcat-9 tar.gz file                   ## not downloading (tested without reboot)
-    get_url:
+    get_url:                                              # downloads (tested after reboot)
       url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.74/bin/apache-tomcat-9.0.74.tar.gz
       dest: /tmp/apache-tomcat-9.0.74.tar.gz
+      #creates: /tmp/apache-tomcat-9.0.74.tar.gz
 
   - name: extract tar.gz file to /opt/tomcat
     unarchive:
@@ -83,5 +84,6 @@
   handlers:
   - name: daemon-reload
     systemd:                 # systemd, not service
+      name: tomcat.service    # you can just give tomcat, with the .service extension
       daemon_reload: true     # When set to true, runs daemon-reload even if the module does not start or stop anything.
       enabled: true

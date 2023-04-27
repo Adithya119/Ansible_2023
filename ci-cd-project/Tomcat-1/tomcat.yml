@@ -113,3 +113,6 @@
       enabled: true
 
   - name: restart tomcat
+    service:
+      name: tomcat.service
+      state: restarted

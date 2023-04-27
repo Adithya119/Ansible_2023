@@ -86,7 +86,8 @@
     lineinfile:
       path: /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
       regexp: '^allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />'
-      line: allow=".*" />
+      insertafter: '^allow='
+      line: ".*" />
 
 
   handlers:

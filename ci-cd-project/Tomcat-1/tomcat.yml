@@ -65,6 +65,23 @@
   # because there's more than 1 file, use loop logic      *******  v.imp ******
   - name: give execute permissions for all .sh files 
     file:
-      path: "{{ item }}"        # you can also give name
+      path: "{{ item }}"        # you can also give name instead of path
       mode: 0751
     with_items: "{{ sh_files }}"
+
+  - name: copy tomcat.service file    # refer Notes file
+    copy:
+      src: tomcat.service
+      dest: /etc/systemd/system/tomcat.service
+    notify: daemon-reload
+
+  - name: start tomcat.service
+    service:
+      name: tomcat.service
+      state: started
+      
+  handlers:
+  - name: daemon-reload
+    systemd:                 # systemd, not service
+      daemon_reload: true     # When set to true, runs daemon-reload even if the module does not start or stop anything.
+      enabled: true

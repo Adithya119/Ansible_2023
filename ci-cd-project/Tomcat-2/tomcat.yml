@@ -1,0 +1,119 @@
+# installing tomcat on Ubuntu servers
+
+- name: Install tomcat-9
+  hosts: all
+  become: yes
+  tasks:
+  - name: apt update & install java
+    package:
+      update_cache: true
+      name: "{{ java_version }}"
+      state: present
+  
+  - name: create user tomcat
+    user:
+      name: tomcat
+      home: /opt/tomcat
+      shell: /bin/false
+
+  - name: download tomcat-9 tar.gz file                   ## not downloading (tested without reboot)
+    get_url:                                              # downloads (tested after reboot)
+      url: "https://dlcdn.apache.org/tomcat/tomcat-{{ tomcat_major_version }}/v{{ tomcat_minor_version }}/bin/apache-tomcat-{{ tomcat_minor_version }}.tar.gz"
+#                           https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.74/bin/apache-tomcat-9.0.74.tar.gz
+      dest: /tmp/apache-tomcat-{{ tomcat_minor_version }}.tar.gz
+
+  - name: extract tar.gz file to /opt/tomcat
+    unarchive:
+      dest: /opt/tomcat         # absolute path
+      remote_src: true  # Set to true to indicate the archived file is already on the remote system and not local to the Ansible controller.
+      src: /tmp/apache-tomcat-{{ tomcat_minor_version }}.tar.gz
+      creates: /opt/tomcat/apache-tomcat-{{ tomcat_minor_version }}    # If the specified absolute path (file or directory) already exists, this step will be skipped.
+
+
+# Tomcat is updated on a regular basis with security patches and new features. To have more control over versions and updates, we’ll - 
+# create a symbolic link called latest, that points to the Tomcat installation directory.
+  - name: create symbolic link "latest"
+    file:
+      src: /opt/tomcat/apache-tomcat-{{ tomcat_minor_version }}      # command format --> "ln -s src dest"
+      path: /opt/tomcat/latest   # dest
+      state: link
+
+  - name: make tomcat user as the owner for /opt/tomcat/ directory 
+    file:
+      state: directory
+      path: /opt/tomcat/
+      owner: tomcat
+      group: tomcat
+      recurse: true        # applies this ownership recursively to all files inside the directory.
+
+
+# next 4 steps is to give execute permissions to .sh files under /opt/tomcat/latest/bin/
+  - name: find .sh files under /opt/tomcat/latest/bin
+    find: 
+      path: /opt/tomcat/latest/bin              # give paths if there's more than 1 dir to search
+      pattern: "*.sh"                             # give patterns if there's more than 1 pattern
+    register: output                    # storing the result in a variable
+
+  # from the find command output, we are grepping for files/path names only & storing it as a fact
+  - name: set your own fact so that you can grep for the required information
+    set_fact:
+      sh_files: "{{ output.files | map(attribute = 'path') | list }}"                  # sh_files is the fact's name
+
+  - name: print the .sh files (contents of newly created ansible fact)
+    debug:
+      msg: "{{ sh_files }}"    # file names will be printed
+
+  # because there's more than 1 file, use loop logic      *******  v.imp ******
+  - name: give execute permissions for all .sh files 
+    file:
+      path: "{{ item }}"        # you can also give name instead of path
+      mode: 0751
+    with_items: "{{ sh_files }}"
+
+  - name: copy tomcat.service file    # refer Notes file
+    copy:
+      src: tomcat.service
+      dest: /etc/systemd/system/tomcat.service
+    notify: daemon-reload
+
+  - name: start tomcat.service
+    service:
+      name: tomcat.service
+      state: started
+# At this point, you should be able to access Tomcat with a web browser on port 8080
+
+  - name: add content to tomcat-users.xml file
+    blockinfile:
+      path: /opt/tomcat/latest/conf/tomcat-users.xml
+      block: |                                          # the "hash" sign is just to give indentation to the content
+        #               
+           <role rolename="admin-gui"/>
+           <role rolename="manager-gui"/>
+           <user username="admin" password="password" roles="admin-gui,manager-gui"/>        
+      insertbefore: </tomcat-users>
+    notify: restart tomcat                        # a change in all these files needs a service restart
+
+  - name: Replace an entry in manager-context file       # refer Notes file
+    lineinfile:
+      path: /opt/tomcat/latest/webapps/manager/META-INF/context.xml
+      regexp: '^allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />'        # regexp: '^<line to replace>'     # note the use of ^
+      line: '         allow=".*" />'                                    # line to be replaced with  # left 9 space for indentation
+
+  - name: Replace an entry in host-manager-context file       
+    lineinfile:
+      path: /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
+      regexp: '^allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />'
+      line: '         allow=".*" />'             
+
+
+  handlers:
+  - name: daemon-reload
+    systemd:                 # systemd, not service
+      name: tomcat.service    # you can just give tomcat, with the .service extension
+      daemon_reload: true     # When set to true, runs daemon-reload even if the module does not start or stop anything.
+      enabled: true
+
+  - name: restart tomcat
+    service:
+      name: tomcat.service
+      state: restarted

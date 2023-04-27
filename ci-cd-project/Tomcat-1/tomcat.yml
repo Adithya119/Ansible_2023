@@ -96,13 +96,13 @@
       path: /opt/tomcat/latest/webapps/manager/META-INF/context.xml
       regexp: '^allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />'        # regexp: '^<line to replace>'     # note the use of ^
       line: '         allow=".*" />'                                    # line to be replaced with  # left 9 space for indentation
-    notify: restart tomcat
 
   - name: Replace an entry in host-manager-context file       
     lineinfile:
       path: /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
       regexp: '^allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />'
-      line: '         allow=".*" />'                                     
+      line: '         allow=".*" />' 
+    notify: restart tomcat                        # a change in all these files needs a service restart            
 
 
   handlers:

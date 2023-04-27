@@ -27,7 +27,8 @@
       file:
         path: "/tmp/apache-tomcat-{{ tomcat_minor_version }}.tar.gz"
         state: absent
-        
+   
+    # by deleting /opt/tomcat/latest sim link, all files under it will be deleted (tomcat-users.xml, manager/context.xml & host-manager/context.xml)     
     - name: delete the "latest" sim link
       file:
         path: /opt/tomcat/latest
@@ -42,8 +43,6 @@
       file:
         path: /etc/systemd/system/tomcat.service
         state: absent
-      notify: daemon-reload                          # deleting a unit-file should be notified to systemd
-    # by deleting /opt/tomcat/latest sim link, all files under it will be deleted (tomcat-users.xml, manager/context.xml & host-manager/context.xml)
 
     - name: delete tomcat user
       user:
@@ -52,9 +51,3 @@
         shell: /bin/false
         state: absent
         force: yes
-  
-  handlers:
-    - name: daemon-reload
-      systemd:
-        name: tomcat.service
-        daemon_reload: true

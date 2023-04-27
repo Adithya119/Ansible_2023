@@ -86,10 +86,12 @@
     blockinfile:
       path: /opt/tomcat/latest/conf/tomcat-users.xml
       block: |
+        #
            <role rolename="admin-gui"/>
            <role rolename="manager-gui"/>
            <user username="admin" password="password" roles="admin-gui,manager-gui"/>        
       insertbefore: </tomcat-users>
+    notify: restart tomcat                        # a change in all these files needs a service restart
 
   - name: Replace an entry in manager-context file       # refer Notes file
     lineinfile:
@@ -101,8 +103,7 @@
     lineinfile:
       path: /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
       regexp: '^allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />'
-      line: '         allow=".*" />' 
-    notify: restart tomcat                        # a change in all these files needs a service restart            
+      line: '         allow=".*" />'             
 
 
   handlers:

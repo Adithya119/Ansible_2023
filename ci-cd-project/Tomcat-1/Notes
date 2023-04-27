@@ -9,3 +9,7 @@
 
 # you should notify systemd whenever you add a new unit file --> # sudo systemctl daemon-reload
     ex: /etc/systemd/system/tomcat.service
+
+
+# the files: tomcat-users.xml, manager-context.xml & host-manager-context.xml are already created by the system, hence I have - 
+# used lineinfile module to just replace the stuff I want

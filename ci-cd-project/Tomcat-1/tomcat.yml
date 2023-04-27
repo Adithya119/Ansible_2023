@@ -82,13 +82,27 @@
       state: started
 # At this point, you should be able to access Tomcat with a web browser on port 8080
 
-  - name: Replace an entry in host-manager-context file
+  - name: add content to tomcat-users.xml file
+    blockinfile:
+      path: /opt/tomcat/latest/conf/tomcat-users.xml
+      block: |
+           <role rolename="admin-gui"/>
+           <role rolename="manager-gui"/>
+           <user username="admin" password="password" roles="admin-gui,manager-gui"/>        
+      insertbefore: </tomcat-users>
+
+  - name: Replace an entry in manager-context file       # refer Notes file
+    lineinfile:
+      path: /opt/tomcat/latest/webapps/manager/META-INF/context.xml
+      regexp: '^allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />'        # regexp: '^<line to replace>'     # note the use of ^
+      line: '         allow=".*" />'                                    # line to be replaced with  # left 9 space for indentation
+    notify: restart tomcat
+
+  - name: Replace an entry in host-manager-context file       
     lineinfile:
       path: /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
       regexp: '^allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />'
-      #search_string: '127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1'
-      #insertafter: '^allow= '
-      line: '         allow=".*" />'
+      line: '         allow=".*" />'                                     
 
 
   handlers:
@@ -97,3 +111,5 @@
       name: tomcat.service    # you can just give tomcat, with the .service extension
       daemon_reload: true     # When set to true, runs daemon-reload even if the module does not start or stop anything.
       enabled: true
+
+  - name: restart tomcat

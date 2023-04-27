@@ -25,7 +25,7 @@
 
     - name: delete tomcat tar file
       file:
-        path: "/tmp/apache-tomcat-{{ tomcat_minor_version }}.tar.gz"
+        path: /tmp/apache-tomcat-9.0.74.tar.gz
         state: absent
    
     # by deleting /opt/tomcat/latest sim link, all files under it will be deleted (tomcat-users.xml, manager/context.xml & host-manager/context.xml)     
@@ -36,7 +36,7 @@
 
     - name: delete the unzipped tomcat tar file 
       file:
-        path: "/opt/tomcat/apache-tomcat-{{ tomcat_minor_version }}"
+        path: /opt/tomcat/apache-tomcat-9.0.74
         state: absent
 
     - name: delete tomcat.service file on Ubuntu

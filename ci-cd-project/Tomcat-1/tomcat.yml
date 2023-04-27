@@ -85,8 +85,8 @@
   - name: add content to tomcat-users.xml file
     blockinfile:
       path: /opt/tomcat/latest/conf/tomcat-users.xml
-      block: |
-        #
+      block: |                                          # the "hash" sign is just to give indentation to the content
+        #               
            <role rolename="admin-gui"/>
            <role rolename="manager-gui"/>
            <user username="admin" password="password" roles="admin-gui,manager-gui"/>        

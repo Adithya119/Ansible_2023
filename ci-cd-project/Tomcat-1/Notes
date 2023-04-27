@@ -1,15 +1,21 @@
+# Tomcat-1/tomcat.yml doesn't have any vars. It's plain & easy to understand
+
 # Easiest way to give execute permissions is: -
     https://docs.ansible.com/ansible/latest/collections/ansible/builtin/fileglob_lookup.html#ansible-collections-ansible-builtin-fileglob-lookup
+    
     https://directdevops.blog/2022/08/09/devops-classroomnotes-09-aug-2022/
+
 
 # You can also directly give command:-
 "command" is a module
     command: sudo sh -c 'chmod +x /opt/tomcat/latest/bin/*.sh'
 
 
-# you should notify systemd whenever you add a new unit file --> # sudo systemctl daemon-reload
+# you should notify systemd whenever you add a unit file --> # sudo systemctl daemon-reload
     ex: /etc/systemd/system/tomcat.service
 
 
-# the files: tomcat-users.xml, manager-context.xml & host-manager-context.xml are already created by the system, hence I have - 
-# used lineinfile module to just replace the stuff I want
+# the file tomcat-users.xml is an existing file, hence I have used blockinfile module to add content to it.
+
+# the files manager-context.xml & host-manager-context.xml are already created by the system, hence I have used lineinfile module - 
+# to just replace the line I want.

@@ -21,7 +21,29 @@
     - name: Uninstall Java on Ubuntu
       package:
         name: openjdk-11-jdk
+        state: absent    
+
+    - name: delete tomcat tar file
+      file:
+        path: /tmp/apache-tomcat-9.0.74.tar.gz
         state: absent
+        
+    - name: delete the "latest" sim link
+      file:
+        path: /opt/tomcat/latest
+        state: absent
+
+    - name: delete the unzipped tomcat tar file 
+      file:
+        path: /opt/tomcat/apache-tomcat-9.0.74
+        state: absent
+
+    - name: delete tomcat.service file on Ubuntu
+      file:
+        path: /etc/systemd/system/tomcat.service
+        state: absent
+      notify: daemon-reload                          # deleting a unit-file should be notified to systemd
+    # by deleting /opt/tomcat/latest sim link, all files under it will be deleted (tomcat-users.xml, manager/context.xml & host-manager/context.xml)
 
     - name: delete tomcat user
       user:
@@ -30,38 +52,9 @@
         shell: /bin/false
         state: absent
         force: yes
-
-    - name: delete tomcat tar file
-      file:
-        path: /tmp/apache-tomcat-9.0.74.tar.gz
-        state: absent
-        
-    - name: delete the unzipped tomcat tar file 
-      file:
-        path: /opt/tomcat
-        state: absent
-        
-    - name: delete the latest dir
-      file:
-        path: /opt/tomcat/latest
-        state: absent
-
-    - name: delete tomcat.service file on Ubuntu
-      file:
-        path: /etc/systemd/system/tomcat.service
-        state: absent
-         
-    - name: delete tomcat users file
-      file:
-        path: /opt/tomcat/latest/conf/tomcat-users.xml
-        state: absent
-      
-    - name: delete tomcat manager config
-      file:
-        path: /opt/tomcat/latest/webapps/manager/META-INF/context.xml
-        state: absent
-      
-    - name: delete tomcat host manager config
-      file:
-        path: /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
-        state: absent
+  
+  handlers:
+    - name: daemon-reload
+      systemd:
+        name: tomcat.service
+        daemon_reload: true

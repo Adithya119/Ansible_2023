@@ -4,10 +4,10 @@
 # sudo dpkg --list | grep -i jdk
 
 # 2) To remove openjdk:
-# sudo apt-get purge openjdk*
+# sudo apt-get purge openjdk* -y
 
 # 3) Uninstall OpenJDK related packages.
-# sudo apt-get purge icedtea-* openjdk-*
+# sudo apt-get purge icedtea-* openjdk-* -y
 
 # 4) Check that all OpenJDK packages have been removed.
 # sudo dpkg --list | grep -i jdk
@@ -25,7 +25,7 @@
 
     - name: delete tomcat tar file
       file:
-        path: /tmp/apache-tomcat-9.0.74.tar.gz
+        path: "/tmp/apache-tomcat-{{ tomcat_minor_version }}.tar.gz"
         state: absent
         
     - name: delete the "latest" sim link
@@ -35,7 +35,7 @@
 
     - name: delete the unzipped tomcat tar file 
       file:
-        path: /opt/tomcat/apache-tomcat-9.0.74
+        path: "/opt/tomcat/apache-tomcat-{{ tomcat_minor_version }}"
         state: absent
 
     - name: delete tomcat.service file on Ubuntu

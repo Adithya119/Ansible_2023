@@ -80,7 +80,15 @@
     service:
       name: tomcat.service
       state: started
-      
+# At this point, you should be able to access Tomcat with a web browser on port 8080
+
+  - name: Replace an entry in host-manager-context file
+    lineinfile:
+      path: /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
+      regexp: '^127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1'
+      line: .*
+
+
   handlers:
   - name: daemon-reload
     systemd:                 # systemd, not service

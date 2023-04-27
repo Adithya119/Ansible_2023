@@ -85,9 +85,10 @@
   - name: Replace an entry in host-manager-context file
     lineinfile:
       path: /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
-      regexp: '^allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />'
-      insertafter: '^allow='
-      line: ".*" />
+      #regexp: '^allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />'
+      search_string: '127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1'
+      #insertafter: '^allow='
+      line: .*
 
 
   handlers:

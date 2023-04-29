@@ -20,21 +20,21 @@
     get_url:                                              # downloads (tested after reboot)
       url: "https://dlcdn.apache.org/tomcat/tomcat-{{ tomcat_major_version }}/v{{ tomcat_minor_version }}/bin/apache-tomcat-{{ tomcat_minor_version }}.tar.gz"
 #                           https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.74/bin/apache-tomcat-9.0.74.tar.gz
-      dest: /tmp/apache-tomcat-{{ tomcat_minor_version }}.tar.gz
+      dest: "/tmp/apache-tomcat-{{ tomcat_minor_version }}.tar.gz"
 
   - name: extract tar.gz file to /opt/tomcat
     unarchive:
       dest: /opt/tomcat         # absolute path
       remote_src: true  # Set to true to indicate the archived file is already on the remote system and not local to the Ansible controller.
-      src: /tmp/apache-tomcat-{{ tomcat_minor_version }}.tar.gz
-      creates: /opt/tomcat/apache-tomcat-{{ tomcat_minor_version }}    # If the specified absolute path (file or directory) already exists, this step will be skipped.
+      src: "/tmp/apache-tomcat-{{ tomcat_minor_version }}.tar.gz"
+      creates: "/opt/tomcat/apache-tomcat-{{ tomcat_minor_version }}"    # If the specified absolute path (file or directory) already exists, this step will be skipped.
 
 
 # Tomcat is updated on a regular basis with security patches and new features. To have more control over versions and updates, we’ll - 
 # create a symbolic link called latest, that points to the Tomcat installation directory.
   - name: create symbolic link "latest"
     file:
-      src: /opt/tomcat/apache-tomcat-{{ tomcat_minor_version }}      # command format --> "ln -s src dest"
+      src: "/opt/tomcat/apache-tomcat-{{ tomcat_minor_version }}"      # command format --> "ln -s src dest"
       path: /opt/tomcat/latest   # dest
       state: link
 

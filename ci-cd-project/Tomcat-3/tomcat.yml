@@ -47,18 +47,18 @@
       recurse: true        # applies this ownership recursively to all files inside the directory.
 
 # testing
-  - name: print all shell files
-    debug:
-      msg: "{{ item }}"
-    with_fileglob:
-      - /opt/tomcat/latest/bin/*.sh
+  - name: find .sh files
+    find:
+      path: /opt/tomcat/latest/bin
+      pattern: "*.sh"
+    register: output
 
   - name: Give execute permissions for all .sh files under "/opt/tomcat/latest/bin" folder
     file:
       path: "{{ item }}"
       mode: "+x"              # you can also give 0751
     with_fileglob:
-    - /opt/tomcat/latest/bin/*.sh
+    - "{{ output }}"
 
   - name: copy tomcat.service file    # refer Notes file
     copy:

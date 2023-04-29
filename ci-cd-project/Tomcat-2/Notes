@@ -1,6 +1,6 @@
 # In Tomcat-2, the only change is we are using vars --> group_vars folder
 
-# We are upgrading tomcat to tomcat-10.1.18 by modifying only the groupvars/webservers file
+# We are upgrading tomcat to tomcat-10.1.8 by modifying only the groupvars/webservers file
 
 # For changing what latest points to:-
   ln -sfn /a/new/path files  

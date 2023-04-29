@@ -50,6 +50,8 @@
     find:
       path: "{{ item }}"
       pattern: "*.sh"
+      follow: true
+      recurse: true
     with_fileglob:
     - /opt/tomcat/latest/bin/*.sh
 

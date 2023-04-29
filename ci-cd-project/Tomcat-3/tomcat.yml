@@ -58,7 +58,7 @@
       path: "{{ item }}"
       mode: "+x"              # you can also give 0751
     with_fileglob:
-    - output.files
+    - "{{ output.files }}"
 
   - name: copy tomcat.service file    # refer Notes file
     copy:

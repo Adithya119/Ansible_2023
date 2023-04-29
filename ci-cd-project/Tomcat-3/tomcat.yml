@@ -46,19 +46,24 @@
       group: tomcat
       recurse: true        # applies this ownership recursively to all files inside the directory.
 
+# testing
+  - name: Display paths of all .sh files in dir
+    debug: 
+      msg={{ lookup('ansible.builtin.fileglob', '/opt/tomcat/latest/bin/*.sh') }}
+
   - name: Give execute permissions for all .sh files under "/opt/tomcat/latest/bin" folder
     file:
       path: "{{ item }}"
       mode: "+x"              # you can also give 0751
     with_fileglob:
-    - /opt/tomcat/latest/bin/*.sh
+    - "/opt/tomcat/latest/bin/*.sh"
 
   - name: copy tomcat.service file    # refer Notes file
     copy:
       src: tomcat.service
       dest: /etc/systemd/system/tomcat.service
 
-  - name: daemon-reload
+  - name: daemon-reload & start tomcat.service
     systemd:                 # systemd, not service
       name: tomcat.service    # you can just give tomcat, with the .service extension
       daemon_reload: true     # When set to true, runs daemon-reload even if the module does not start or stop anything.

@@ -19,3 +19,9 @@
 
 # the files manager-context.xml & host-manager-context.xml are already created by the system, hence I have used lineinfile module - 
 # to just replace the line I want.
+
+----
+
+# path module:-
+aliases: dest, name
+   Path to the file being managed.

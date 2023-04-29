@@ -16,7 +16,7 @@
       home: /opt/tomcat
       shell: /bin/false
 
-  - name: download tomcat-9 tar.gz file                   ## not downloading (tested without reboot)
+  - name: download tomcat tar.gz file                   ## not downloading (tested without reboot)
     get_url:                                              # downloads (tested after reboot)
       url: "https://dlcdn.apache.org/tomcat/tomcat-{{ tomcat_major_version }}/v{{ tomcat_minor_version }}/bin/apache-tomcat-{{ tomcat_minor_version }}.tar.gz"
 #                           https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.74/bin/apache-tomcat-9.0.74.tar.gz

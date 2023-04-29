@@ -5,3 +5,16 @@
 # Command for changing what latest points to:-
   ln -sfn /a/new/path files  
     Note:- the "create symbolic link latest" task works like a charm.
+
+--------
+
+# Alternate & Easiest way to give execute permissions is: -
+    https://docs.ansible.com/ansible/latest/collections/ansible/builtin/fileglob_lookup.html#ansible-collections-ansible-builtin-fileglob-lookup
+    
+    https://directdevops.blog/2022/08/09/devops-classroomnotes-09-aug-2022/   ---> loops
+
+---
+
+# path module:-
+aliases: dest, name
+   Path to the file being managed.

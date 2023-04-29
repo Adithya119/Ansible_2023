@@ -9,14 +9,14 @@
       update_cache: true
       name: "{{ java_version }}"
       state: present
-    notify: print the java version used
+    notify: print the java version used                           # testing meta: flush_handlers
   
   - name: create user tomcat
     user:
       name: tomcat
       home: /opt/tomcat
       shell: /bin/false
-    notify: print that tomcat user has been created
+    notify: print that tomcat user has been created               # testing meta: flush_handlers
 
   - name: Flush the notified handlers till now  
     meta: flush_handlers                          # this module will run the handlers (which are notified till now) right now on demand at this point of the play, not at the end of the play.

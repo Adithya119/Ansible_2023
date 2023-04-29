@@ -120,7 +120,7 @@
       name: tomcat.service
       state: restarted
 
-  - name: print java version used
+  - name: print the java version used
     debug:
       msg: "Java version used is {{ java_version }}"
 

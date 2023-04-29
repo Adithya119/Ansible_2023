@@ -51,13 +51,12 @@
       path: "{{ item }}"
       mode: "+x"              # you can also give 0751
     with_fileglob:
-    - /opt/tomcat/latest/bin/.*sh
+    - /opt/tomcat/latest/bin/*.sh
 
   - name: copy tomcat.service file    # refer Notes file
     copy:
       src: tomcat.service
       dest: /etc/systemd/system/tomcat.service
-    notify: daemon-reload
 
   - name: daemon-reload
     systemd:                 # systemd, not service

@@ -1,5 +1,7 @@
 # To uninstall OpenJDK: - 
 
+# PRE-REQ: stop tomcat.service, delete the unit file & do systemctl daemon-reload
+
 # 1) First check which OpenJDK packages are installed.
 # sudo dpkg --list | grep -i jdk
 

@@ -1,5 +1,0 @@
-java_version: openjdk-11-jdk
-tomcat_major_version: '10'
-tomcat_minor_version: '10.1.8'     # 9.0.74, 10.1.8
-
-# https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.8/bin/apache-tomcat-10.1.8.tar.gz

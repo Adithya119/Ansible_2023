@@ -2,16 +2,22 @@
 
 # In Tomcat-2, we have introduced vars --> check "group_vars" folder
 
+# Also, moved daemon-reload from handlers to normal tasks (included state: started inside this task).
+
+
 # Command for changing what latest points to:-
   ln -sfn /a/new/path files  
     Note:- the "create symbolic link latest" task works like a charm.
 
 --------
 
-# *****        Alternate & Easiest way to give execute permissions is ( Refer Tomcat-3 folder )       *********
+# fileglob lookup is NOT WORKING in giving execute permissions to all .sh files --> hence I used the old way (Old is Gold)
+
+ ** This is not working **
+
     https://docs.ansible.com/ansible/latest/collections/ansible/builtin/fileglob_lookup.html#ansible-collections-ansible-builtin-fileglob-lookup
     
-    https://directdevops.blog/2022/08/09/devops-classroomnotes-09-aug-2022/   ---> loops
+    https://directdevops.blog/2022/08/09/devops-classroomnotes-09-aug-2022/   ---> fileglob lookup
 
 ---
 

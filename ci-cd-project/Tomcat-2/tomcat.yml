@@ -46,7 +46,6 @@
       group: tomcat
       recurse: true        # applies this ownership recursively to all files inside the directory.
 
-
 # next 4 steps is to give execute permissions to .sh files under /opt/tomcat/latest/bin/
   - name: find .sh files under /opt/tomcat/latest/bin
     find: 
@@ -74,11 +73,12 @@
     copy:
       src: tomcat.service
       dest: /etc/systemd/system/tomcat.service
-    notify: daemon-reload
 
-  - name: start tomcat.service
-    service:
-      name: tomcat.service
+  - name: daemon-reload & start tomcat.service    
+    systemd:                 # systemd, not service
+      name: tomcat.service    # you can just give tomcat, with the .service extension
+      daemon_reload: true     # When set to true, runs daemon-reload even if the module does not start or stop anything.
+      enabled: true
       state: started
 # At this point, you should be able to access Tomcat with a web browser on port 8080
 
@@ -91,27 +91,24 @@
            <role rolename="manager-gui"/>
            <user username="admin" password="password" roles="admin-gui,manager-gui"/>        
       insertbefore: </tomcat-users>
-    notify: restart tomcat                        # a change in all these files needs a service restart
+    #notify: restart tomcat                        # you can remove the comment
 
   - name: Replace an entry in manager-context file       # refer Notes file
     lineinfile:
       path: /opt/tomcat/latest/webapps/manager/META-INF/context.xml
       regexp: '^allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />'        # regexp: '^<line to replace>'     # note the use of ^
       line: '         allow=".*" />'                                    # line to be replaced with  # left 9 space for indentation
+    #notify: restart tomcat                         you can remove the comment
 
   - name: Replace an entry in host-manager-context file       
     lineinfile:
       path: /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
       regexp: '^allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />'
-      line: '         allow=".*" />'             
+      line: '         allow=".*" />'       
+    notify: restart tomcat                         # A change in all these files needs service restart      
 
 
   handlers:
-  - name: daemon-reload
-    systemd:                 # systemd, not service
-      name: tomcat.service    # you can just give tomcat, with the .service extension
-      daemon_reload: true     # When set to true, runs daemon-reload even if the module does not start or stop anything.
-      enabled: true
 
   - name: restart tomcat
     service:

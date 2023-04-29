@@ -1,6 +1,7 @@
-# In Tomcat-2, the only change is we are using vars --> group_vars folder
+# In Tomcat-2, we are upgrading tomcat to 10.1.8 version by modifying only the groupvars/webservers file
 
-# We are upgrading tomcat to tomcat-10.1.8 by modifying only the groupvars/webservers file
+# In Tomcat-2, we have introduced vars --> check "group_vars" folder
 
-# For changing what latest points to:-
+# Command for changing what latest points to:-
   ln -sfn /a/new/path files  
+    Note:- the "create symbolic link latest" task works like a charm.

@@ -1,4 +1,3 @@
-ansible@ip-172-31-40-2:~/files$ cat tomcat.service-centos
 [Unit]
 Description=Tomcat 9 servlet container
 After=network.target

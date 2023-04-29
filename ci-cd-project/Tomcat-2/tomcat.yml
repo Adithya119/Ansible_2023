@@ -9,12 +9,17 @@
       update_cache: true
       name: "{{ java_version }}"
       state: present
+    notify: print the java version used
   
   - name: create user tomcat
     user:
       name: tomcat
       home: /opt/tomcat
       shell: /bin/false
+    notify: print that tomcat user has been created
+
+  - name: Flush the notified handlers till now  
+    meta: flush_handlers                          # this module will run the handlers (which are notified till now) right now on demand at this point of the play, not at the end of the play.
 
   - name: download tomcat tar.gz file                   ## not downloading (tested without reboot)
     get_url:                                              # downloads (tested after reboot)
@@ -74,8 +79,8 @@
       src: tomcat.service
       dest: /etc/systemd/system/tomcat.service
 
-  - name: daemon-reload & start tomcat.service    
-    systemd:                 # systemd, not service
+  - name: daemon-reload & start tomcat.service    # this is not executing when ran for 2nd time
+    systemd:                  # systemd, not service
       name: tomcat.service    # you can just give tomcat, with the .service extension
       daemon_reload: true     # When set to true, runs daemon-reload even if the module does not start or stop anything.
       enabled: true
@@ -114,3 +119,11 @@
     service:
       name: tomcat.service
       state: restarted
+
+  - name: print java version
+    debug:
+      msg: "Java version used is {{ java_version }}"
+
+  - name: print that tomcat user has been created
+    debug:
+      msg: user tomcat has been created

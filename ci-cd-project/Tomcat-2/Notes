@@ -4,6 +4,8 @@
 
 # Also, moved daemon-reload from handlers to normal tasks (included state: started inside this task).
 
+# Tested meta module's flush_handlers option
+
 
 # Command for changing what latest points to:-
   ln -sfn /a/new/path files  

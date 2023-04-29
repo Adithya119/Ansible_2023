@@ -46,26 +46,35 @@
       group: tomcat
       recurse: true        # applies this ownership recursively to all files inside the directory.
 
-# testing
-  - name: find .sh files
-    find:
-      path: /opt/tomcat/latest/bin
-      pattern: "*.sh"
-    register: output
+# next 4 steps is to give execute permissions to .sh files under /opt/tomcat/latest/bin/
+  - name: find .sh files under /opt/tomcat/latest/bin
+    find: 
+      path: /opt/tomcat/latest/bin              # give paths if there's more than 1 dir to search
+      pattern: "*.sh"                             # give patterns if there's more than 1 pattern
+    register: output                    # storing the result in a variable
 
-  - name: Give execute permissions for all .sh files under "/opt/tomcat/latest/bin" folder
+  # from the find command output, we are grepping for files/path names only & storing it as a fact
+  - name: set your own fact so that you can grep for the required information
+    set_fact:
+      sh_files: "{{ output.files | map(attribute = 'path') | list }}"                  # sh_files is the fact's name
+
+  - name: print the .sh files (contents of newly created ansible fact)
+    debug:
+      msg: "{{ sh_files }}"    # file names will be printed
+
+  # because there's more than 1 file, use loop logic      *******  v.imp ******
+  - name: give execute permissions for all .sh files 
     file:
-      path: "{{ item }}"
-      mode: "+x"              # you can also give 0751
-    with_fileglob:
-    - output.files | map(attribute = 'path') | list
+      path: "{{ item }}"        # you can also give name instead of path
+      mode: 0751                # you can also give "+x"
+    with_items: "{{ sh_files }}"
 
   - name: copy tomcat.service file    # refer Notes file
     copy:
       src: tomcat.service
       dest: /etc/systemd/system/tomcat.service
 
-  - name: daemon-reload & start tomcat.service
+  - name: daemon-reload & start tomcat.service    
     systemd:                 # systemd, not service
       name: tomcat.service    # you can just give tomcat, with the .service extension
       daemon_reload: true     # When set to true, runs daemon-reload even if the module does not start or stop anything.

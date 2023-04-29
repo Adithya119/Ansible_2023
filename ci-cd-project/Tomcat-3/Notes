@@ -2,12 +2,10 @@ Same as Tomcat-2 with minor changes:-
 
 1) moved daemon-reload from handlers to normal tasks (included state: started inside this task).
 
-2) Used fileglob lookup to give execute permissions to all .sh files
+2) fileglob lookup is NOT WORKING in giving execute permissions to all .sh files --> hence I used the old way (Old is Gold)
 
+ ** This is not working **
 
-
-
-# Alternate & Easiest way to give execute permissions is 
     https://docs.ansible.com/ansible/latest/collections/ansible/builtin/fileglob_lookup.html#ansible-collections-ansible-builtin-fileglob-lookup
     
     https://directdevops.blog/2022/08/09/devops-classroomnotes-09-aug-2022/   ---> fileglob lookup

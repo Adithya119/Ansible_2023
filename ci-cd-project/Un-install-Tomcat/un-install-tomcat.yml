@@ -5,13 +5,10 @@
 # 1) First check which OpenJDK packages are installed.
 # sudo dpkg --list | grep -i jdk
 
-# 2) To remove openjdk:
-# sudo apt-get purge openjdk* -y
-
-# 3) Uninstall OpenJDK related packages.
+# 2) Uninstall OpenJDK related packages.
 # sudo apt-get purge icedtea-* openjdk-* -y
 
-# 4) Check that all OpenJDK packages have been removed.
+# 3) Check that all OpenJDK packages have been removed.
 # sudo dpkg --list | grep -i jdk
 
 

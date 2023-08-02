@@ -108,7 +108,7 @@
   handlers:
   - name: daemon-reload
     systemd:                 # systemd, not service
-      name: tomcat.service    # you can just give tomcat, with the .service extension
+      name: tomcat.service    # you can just give tomcat, without the .service extension
       daemon_reload: true     # When set to true, runs daemon-reload even if the module does not start or stop anything.
       enabled: true
 

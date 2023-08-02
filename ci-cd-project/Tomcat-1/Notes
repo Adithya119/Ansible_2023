@@ -9,9 +9,9 @@
     ex: /etc/systemd/system/tomcat.service
 
 
-# the file tomcat-users.xml is an existing file, hence I have used blockinfile module to add content to it.
+# the file tomcat-users.xml is an existing file, hence I have used "blockinfile" module to add content to it.
 
-# the files manager-context.xml & host-manager-context.xml are already created by the system, hence I have used lineinfile module - 
+# the files manager-context.xml & host-manager-context.xml are already created by the system, hence I have used "lineinfile" module - 
 # to just replace the line I want.
 
 ----

@@ -37,7 +37,7 @@
         shell: "{{ tomcat_shell }}"
         state: present
 
-    - name: check if latest dir is present    ## stat module
+    - name: check if latest dir is present    ## stat module  # check notes for explaination
       stat:
         path: "{{ tomcat_home }}/latest"
       register: tomcat_latest_dir

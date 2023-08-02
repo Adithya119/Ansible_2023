@@ -3,3 +3,5 @@ tomcat_major_version: '10'
 tomcat_minor_version: '10.1.8'
 
 # https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.8/bin/apache-tomcat-10.1.8.tar.gz
+
+# group_vars & host_vars folders are standard folder structure of Ansible, to store variables.

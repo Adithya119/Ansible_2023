@@ -6,6 +6,7 @@
 
 # Tested meta module's flush_handlers option
 
+# group_vars & host_vars folders are standard folder structure of Ansible, to store variables.
 
 # Command for changing what latest points to:-
   ln -sfn /a/new/path files  

@@ -1,0 +1,20 @@
+hosts file:-
+    [webubuntu]
+    ip
+    ip
+    
+    [webredhat]
+    ip
+    ip
+     
+
+group_vars folder:- 
+    webubuntu folder:-
+        java_home = 
+
+    webredhat folder:-
+        java_home = 
+
+
+-----------------------
+

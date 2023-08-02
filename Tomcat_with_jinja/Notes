@@ -1,0 +1,5 @@
+With Jinja templates, you can delete tomcat.service & tomcast.service-centos files & create a new file "tomcat.service.j2" under templates folder.
+
+Name of jinja files can be of your choice but should have .j2 extension
+
+# Look into notes for the whole point of why we used Jinja templating.

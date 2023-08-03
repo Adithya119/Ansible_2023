@@ -1,3 +1,3 @@
 # This folder is to test the things mentioned in To-do file
 
-# As of Aug 3rd, Tomcat-3 & 4 are same
+# Same as Tomcat-3 but in Tomcat-4 we are deploying in Redhat node as well .

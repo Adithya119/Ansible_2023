@@ -1,6 +1,6 @@
 java_package: openjdk-11-jdk
-tomcat_minor_version: '10.1.11'
-tomcat_major_version: '10'
+tomcat_minor_version: '9.0.78'
+tomcat_major_version: '9'
 
 # https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.11/bin/apache-tomcat-10.1.11.tar.gz
 

@@ -1,0 +1,3 @@
+java_package: openjdk-11-jdk
+tomcat_minor_version: '10.1.11'
+tomcat_major_version: '10'

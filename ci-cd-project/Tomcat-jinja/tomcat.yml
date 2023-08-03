@@ -45,7 +45,7 @@
     find:
       path: /opt/tomcat/latest/bin
       pattern: "*.sh"
-    register: output
+    register: output           # storing the result in a file called output
 
   - name: set your own fact so that you can grep for files names only       # 2) grepping for 'path' column, which gives only .sh file names & storing it as a fact.
     set_fact:

@@ -56,7 +56,7 @@
     find: 
       path: /opt/tomcat/latest/bin              # give paths if there's more than 1 dir to search
       pattern: "*.sh"                             # give patterns if there's more than 1 pattern
-    register: output                    # storing the result in a variable
+    register: output                    # storing the result in a file called as output  ****
  
   - name: set your own fact so that you can grep for the required information             # 2) grepping for 'path' column, which gives only .sh file names & storing it as a fact.
     set_fact:                                                               # sh_files is the fact's name

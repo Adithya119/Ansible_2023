@@ -16,19 +16,19 @@
 
   - name: download tomcat tar file
     get_url:
-      url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.74/bin/apache-tomcat-9.0.74.tar.gz
-      dest: /tmp/apache-tomcat-9.0.74.tar.gz
+      url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.78/bin/apache-tomcat-9.0.78.tar.gz
+      dest: /tmp/apache-tomcat-9.0.78.tar.gz
       
   - name: untar the tar file
     unarchive:
-      src: /tmp/apache-tomcat-9.0.74.tar.gz
+      src: /tmp/apache-tomcat-9.0.78.tar.gz
       remote_src: true          # Set to true to indicate the archived file is already on the remote system and not local to the Ansible controller.
       dest: /opt/tomcat
-      creates: /opt/tomcat/apache-tomcat-9.0.74.tar.gz    # If the specified absolute path (file or directory) already exists, this step will be skipped.
+      creates: /opt/tomcat/apache-tomcat-9.0.78.tar.gz    # If the specified absolute path (file or directory) already exists, this step will be skipped.
 
   - name: create symlink for tomcat latest 
     file:                                                 # command format --> "ln -s src dest"
-      src: /opt/tomcat/apache-tomcat-9.0.74.tar.gz
+      src: /opt/tomcat/apache-tomcat-9.0.78.tar.gz
       dest: /opt/tomcat/latest
       state: link
 

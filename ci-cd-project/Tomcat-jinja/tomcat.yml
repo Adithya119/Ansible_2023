@@ -28,7 +28,7 @@
 
   - name: create symlink for tomcat latest 
     file:                                                 # command format --> "ln -s src dest"
-      src: /opt/tomcat/apache-tomcat-9.0.78.tar.gz
+      src: /opt/tomcat/apache-tomcat-9.0.78
       dest: /opt/tomcat/latest
       state: link
 

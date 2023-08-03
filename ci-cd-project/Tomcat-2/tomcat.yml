@@ -52,16 +52,15 @@
       recurse: true        # applies this ownership recursively to all files inside the directory.
 
 # next 4 steps is to give execute permissions to .sh files under /opt/tomcat/latest/bin/
-  - name: find .sh files under /opt/tomcat/latest/bin
+  - name: find .sh files under /opt/tomcat/latest/bin          # 1) find all .sh files & register the output to some file.
     find: 
       path: /opt/tomcat/latest/bin              # give paths if there's more than 1 dir to search
       pattern: "*.sh"                             # give patterns if there's more than 1 pattern
     register: output                    # storing the result in a variable
-
-  # from the find command output, we are grepping for files/path names only & storing it as a fact
-  - name: set your own fact so that you can grep for the required information
-    set_fact:
-      sh_files: "{{ output.files | map(attribute = 'path') | list }}"                  # sh_files is the fact's name
+ 
+  - name: set your own fact so that you can grep for the required information             # 2) grepping for 'path' column, which gives only .sh file names & storing it as a fact.
+    set_fact:                                                               # sh_files is the fact's name
+      sh_files: "{{ output.files | map(attribute = 'path') | list }}"       # see Notes for explanation             
 
   - name: print the .sh files (contents of newly created ansible fact)
     debug:
@@ -82,12 +81,12 @@
   - name: daemon-reload & start tomcat.service    # this is not executing when ran for 2nd time, which means Ansible is checking current & desired state & will only run this if they both are not same.
     systemd:                  # systemd, not service
       name: tomcat.service    # you can just give tomcat, without the .service extension
-      daemon_reload: true     # When set to true, runs daemon-reload even if the module does not start or stop anything.
+      daemon_reload: true     # When set to true, runs daemon-reload even if the module does not start or stop anything. (sudo systemctl daemon-reload)
       enabled: true
       state: started
 # At this point, you should be able to access Tomcat with a web browser on port 8080
 
-  - name: add content to tomcat-users.xml file
+  - name: add contents to tomcat-users.xml file
     blockinfile:
       path: /opt/tomcat/latest/conf/tomcat-users.xml
       block: |                                          # the "hash" sign is just to give indentation to the content

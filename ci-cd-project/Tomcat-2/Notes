@@ -8,6 +8,12 @@
 
 # group_vars & host_vars folders are standard folder structure of Ansible, to store variables.
 
+
+sh_files: "{{ output.files | map(attribute = 'path') | list }}"
+# in the above code, 'path' is the column name of contents inside output file.
+
+
+
 # Command for changing what latest points to:-
   ln -sfn /a/new/path files  
     Note:- the "create symbolic link latest" task works like a charm.

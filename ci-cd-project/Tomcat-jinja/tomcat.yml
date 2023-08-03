@@ -1,0 +1,106 @@
+- name: Tomcat with Jinja
+  become: yes
+  hosts: all
+  tasks:
+  - name: update cache & install Java
+    package:
+      name: openjdk-11-jdk
+      state: present
+      update_cache: true
+
+  - name: create tomcat user      # system user => hence, use /bin/false for shell
+    user:
+      name: tomcat
+      home: /opt/tomcat
+      shell: /bin/flase
+
+  - name: download tomcat tar file
+    get_url:
+      url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.74/bin/apache-tomcat-9.0.74.tar.gz
+      dest: /tmp/apache-tomcat-9.0.74.tar.gz
+      
+  - name: untar the tar file
+    unarchive:
+      src: /tmp/apache-tomcat-9.0.74.tar.gz
+      remote_src: true          # Set to true to indicate the archived file is already on the remote system and not local to the Ansible controller.
+      dest: /opt/tomcat
+      creates: /opt/tomcat/apache-tomcat-9.0.74.tar.gz    # If the specified absolute path (file or directory) already exists, this step will be skipped.
+
+  - name: create symlink for tomcat latest 
+    file:                                                 # command format --> "ln -s src dest"
+      src: /opt/tomcat/apache-tomcat-9.0.74.tar.gz
+      dest: /opt/tomcat/latest
+      state: link
+
+  - name: make tomcat user as owner for /opt/tomcat
+    file:
+      path: /opt/tomcat/
+      recurse: true                      # applies this ownership recursively to all files inside the directory.
+      owner: tomcat
+      group: tomcat
+      state: directory
+
+  # next 4 steps is to give execute permissions to .sh files under /opt/tomcat/latest/bin/
+  - name: find all .sh files under /opt/tomcat/latest/bin/ folder           # 1) find all .sh files & register the output to some file.
+    find:
+      path: /opt/tomcat/latest/bin
+      pattern: "*.sh"
+    register: output
+
+  - name: set your own fact so that you can grep for files names only       # 2) grepping for 'path' column, which gives only .sh file names & storing it as a fact.
+    set_fact:
+      sh_files: "{{ output.files | map(attribute = 'path') | list }}"
+
+  - name: print the .sh file names          # 3) this is just for displaying on the screen (not mandatory)
+    debug:
+      msg: "{{ sh_files }}"
+
+  - name: give execute permission for all the .sh files      # 4) give execute permission in a loop
+    file:
+      path: "{{ item }}"            # write this 2nd
+      mode: 0751
+    with_items: "{{ sh_files }}"    # write this 1st
+
+  - name: copy tomcat.service file to remote nodes
+    copy:
+      src: tomcat.service
+      dest: /etc/systemd/system/tomcat.service
+    
+  - name: restart systemd & start tomcat service       # check Tomcat-2 folder for explanation on this task
+    systemd:
+      name: tomcat.service
+      daemon_reload: true                # sudo systemctl daemon-reload
+      state: started
+      enabled: true
+
+  - name: add contents to tomcat-users.xml file
+    blockinfile:
+      path: /opt/tomcat/latest/conf/tomcat-users.xml
+      block: |                                               # content you want to add
+        #
+           <role rolename="admin-gui"/>
+           <role rolename="manager-gui"/>
+           <user username="admin" password="password" roles="admin-gui,manager-gui"/>
+      insertbefore: </tomcat-users>                                                         # where do you want to add this content
+    #notify: restart tomcat 
+
+  - name: replace a line in manager-context file
+    lineinfile:
+      path: /opt/tomcat/latest/webapps/manager/META-INF/context.xml
+      regexp: '^allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />'        # line you want to replace     # note the use of ^
+      line: '         allow=".*" />'
+    #notify: restart tomcat
+
+  - name: replace a line in host-manager-context file
+    lineinfile:
+      path: /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
+      regexp: '^allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />'        # line you want to replace     # note the use of ^
+      line: '         allow=".*" />'
+    notify: restart tomcat
+
+
+  handlers:
+  - name: restart tomcat
+    service:
+      name: tomcat.service
+      state: restarted

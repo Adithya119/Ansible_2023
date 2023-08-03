@@ -1,0 +1,23 @@
+Question:- 
+1) should the groupname inside hosts file (ex:- webubuntu) & the folder name under group_vars (ex:- webubuntu) match, for ansible to select appropriate vars?
+
+--
+hosts file:-
+    [webubuntu]
+    ip
+    ip
+    
+    [webredhat]
+    ip
+    ip
+     
+
+group_vars folder:- 
+    "webubuntu" folder:-
+        java_home = 
+
+    "webredhat" folder:-
+        java_home = 
+
+-----------------------
+

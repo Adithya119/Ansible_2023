@@ -66,13 +66,6 @@
       src: tomcat.service
       dest: /etc/systemd/system/tomcat.service
     when: ansible_facts['distribution'] == "Ubuntu"
-    
-  - name: restart systemd & start tomcat service       # check Tomcat-2 folder for explanation on this task
-    systemd:
-      name: tomcat.service
-      daemon_reload: true                # sudo systemctl daemon-reload
-      state: started
-      enabled: true
 
   - name: copy tomcat.service-redhat file to RedHat nodes
     copy:

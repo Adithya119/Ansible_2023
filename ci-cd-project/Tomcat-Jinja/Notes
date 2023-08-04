@@ -1,1 +1,9 @@
-# Same as Tomcat-3 but in Tomcat-Jinja we have used Jinja templating.
+# Same as Tomcat-3 but in Tomcat-Jinja we have used Jinja templating for the following reasons:-
+
+
+
+# 1) Without Jinja, you used 2 tasks to copy tomcat.service file to remote nodes (1 task for each OS type). This is redundant & can be optimized. This is the 1st area of improvement. 
+
+# 2) The 2nd area of improvement is static file copy is not a good idea (ex: copying tomcat.service file) because the values of the fields inside that file are prone to change in future. Hence you should have variables inside this file. But Ansible only 'reads' the playbook file (.yml) & hence if you have variables inside tomcat.service file, ansible cannot/won't read it with 'copy' module (I've tested it).
+
+# 3) Hence, you need to introduce Jinja templating. Refer note book for changes need to be made.

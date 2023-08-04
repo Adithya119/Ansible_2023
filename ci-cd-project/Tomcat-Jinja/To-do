@@ -1,0 +1,34 @@
+Question:- 
+1) should the groupname inside hosts file (ex:- webubuntu) & the folder name under group_vars (ex:- webubuntu) match, for ansible to select appropriate vars?
+A) Absolutely Yes!
+
+Explaination:
+---
+hosts file:-
+    [webubuntu]
+    172.31.38.155
+
+    [webredhat]
+    172.31.45.220
+     
+
+group_vars folder:- 
+    "webubuntu" folder:-
+        java_package: openjdk-11-jdk
+        tomcat_minor_version: '9.0.78'
+        tomcat_major_version: '9'
+
+    "webredhat" folder:-
+        java_package: java-11-openjdk-devel
+        tomcat_minor_version: '10.1.11'
+        tomcat_major_version: '10'
+---
+
+# 
+# 1) Ansible control node reads tomcat.yml => 
+# 2) it picks to work on '172.31.38.155' (orderly fasion) & it comes across it's 1st task (install java) & sees this variable    -      "{{ java_package }}" => it needs to look for the value of this variable & notices that there are only group_vars defined in the current directory & no specific host_vars & then notices that this ip '172.31.38.155' is 'grouped' under [webubuntu] of hosts file.
+# 3) Hence, it pulls the value of this variable from 'webubuntu' file under group_vars folder
+
+# 4) with the similar logic, for ip '172.31.45.220', it pulls the var from 'webredhat' file under group_vars folder
+
+# 5) But if you had written a 'host_vars/172.31.38.155' file, then values in host_vars will be given precedence over the values mentioned in 'group_vars/webubuntu'. That's how priority works.

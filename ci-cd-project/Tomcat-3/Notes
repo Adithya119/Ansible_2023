@@ -1,3 +1,3 @@
-# This folder is to test the things mentioned in To-do file
+# Same as Tomcat-2 but in Tomcat-3 we are deploying in Redhat node as well.
 
-# In this folder, we deployed only in Ubuntu
+# Also, in this folder we have tested the things mentioned in To-do file. Look at To-do file for Great Explaination * * * * *

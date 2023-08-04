@@ -1,3 +1,3 @@
-java_package: openjdk-11-jdk
+java_package: java-11-openjdk-devel
 tomcat_minor_version: '10.1.11'
 tomcat_major_version: '10'

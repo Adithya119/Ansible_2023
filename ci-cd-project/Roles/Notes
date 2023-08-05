@@ -1,0 +1,8 @@
+By default, Ansible looks for roles in the following locations:
+
+1)    in collections, if you are using them
+2)    in a directory called roles/, relative to the playbook file
+3)    in the configured roles_path. The default search path is ~/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles.
+4)    in the directory where the playbook file is located
+
+choose either 2) or 4)

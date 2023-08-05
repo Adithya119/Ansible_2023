@@ -65,7 +65,7 @@
 
   - name: copy tomcat.service file to remote nodes
     template:
-      src: roles/tomcat-role/templates/tomcat.service.j2     # adjusting the path acc to new folder structure caused by the introduction of 'roles'.
+      src: tomcat.service.j2     # adjusting the path acc to new folder structure caused by the introduction of 'roles'.
       dest: /etc/systemd/system/tomcat.service
     
   - name: restart systemd & start tomcat service       

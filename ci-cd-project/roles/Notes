@@ -23,12 +23,18 @@ https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.htm
 
 
 ----------------------------------
-chanages made to files:-
 
-1) src: roles/tomcat-role/templates/tomcat.service.j2
+Chanages made with the introduction of role structuring:-
+
+1) src: tomcat.service.j2 
+
+      # remove 'files/' which was written in front of 'tomcat.service.j2'. Because, ansible is aware of 'role' structure & hence by-default knows where to look for template files.
+
 
 2) 1st task:-
       - name: include os specific variables
         include_vars: "vars/{{ ansible_facts['distribution'] }}.yml"  # --> this does the trick.
             
-            # 1st Ansible picks [webubuntu] 172.31.38.155 & runs the 1st task, it reads "include_vars: vars/{{ ansible_facts['distribution'] }}.yml" & reads the current host's (172.31.38.155) distribution & looks for vars/Ubuntu.yml for this host & it follows this rule throughout this playbook for this host because of "include_vars" .
+            # 1st Ansible picks [webubuntu] 172.31.38.155 & runs the 1st task, it reads "include_vars: vars/{{ ansible_facts['distribution'] }}.yml" & reads the current host's (172.31.38.155) distribution & looks for vars/Ubuntu.yml for this host & it follows this rule throughout this playbook for this host because of "include_vars".
+
+            # In crude sense, I could say, as soon as ansible sees 'include_vars', it includes this vars ("vars/{{ ansible_facts['distribution'] }}.yml") for this host (172.31.38.155).

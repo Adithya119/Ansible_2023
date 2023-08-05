@@ -20,3 +20,9 @@ choose either 2) or 4)
 Also check:- 
 https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html#role-directory-structure
 https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html#including-roles-dynamic-reuse
+
+
+----------------------------------
+chanages made to files:-
+
+1) src: roles/tomcat-role/templates/tomcat.service.j2

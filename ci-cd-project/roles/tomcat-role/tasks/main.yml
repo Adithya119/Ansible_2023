@@ -1,6 +1,9 @@
 ---
 # tasks file for tomcat-role  # directly start with tasks
 
+  - name: include os specific variables        # telling Ansible where to look for vars
+    include_vars: "vars/{{ ansible_facts['distribution'] }}.yml"
+  
   - name: update cache & install Java
     package:
       name: "{{ java_package }}"

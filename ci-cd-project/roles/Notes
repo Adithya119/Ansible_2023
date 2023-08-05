@@ -26,3 +26,9 @@ https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.htm
 chanages made to files:-
 
 1) src: roles/tomcat-role/templates/tomcat.service.j2
+
+2) 1st task:-
+      - name: include os specific variables
+        include_vars: "vars/{{ ansible_facts['distribution'] }}.yml"  # --> this does the trick.
+            
+            # 1st Ansible picks [webubuntu] 172.31.38.155 & runs the 1st task, it reads "include_vars: vars/{{ ansible_facts['distribution'] }}.yml" & reads the current host's (172.31.38.155) distribution & looks for vars/Ubuntu.yml for this host & it follows this rule throughout this playbook for this host because of "include_vars" .

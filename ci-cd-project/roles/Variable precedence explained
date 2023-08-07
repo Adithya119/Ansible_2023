@@ -1,0 +1,57 @@
+Types of variables:-
+https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html#using-variables
+
+---
+
+Variable precedence categories:-  * * *
+https://docs.ansible.com/ansible/latest/reference_appendices/general_precedence.html#precedence-categories
+
+Variables can set a value for the play, then override it in a task, block, or role:
+
+- hosts: cloud
+  gather_facts: false
+  become: true
+  vars:
+    ansible_become_user: admin
+  tasks:
+    - name: This task uses admin as the become user.
+      dnf:
+        name: some-service
+        state: latest
+    - block:
+        - name: This task uses service-admin as the become user.
+          # a task to configure the new service
+        - name: This task also uses service-admin as the become user, defined in the block.
+          # second task to configure the service
+      vars:
+        ansible_become_user: service-admin
+    - name: This task (outside of the block) uses admin as the become user again.
+      service:
+        name: some-service
+        state: restarted
+
+---
+
+
+You can also add group-specific settings in group vars files. In the following example, CentOS machines get the value of ‘42’ for asdf but other machines get ‘10’. You can also use group vars files to apply roles to systems as well as set variables.
+
+-
+# file: group_vars/all
+asdf: 10
+
+-
+# file: group_vars/os_CentOS.yml
+asdf: 42
+
+
+---
+
+storing variables in vault:- 
+https://docs.ansible.com/ansible/latest/tips_tricks/ansible_tips_tricks.html#keep-vaulted-variables-safely-visible
+
+---
+
+
+***** To-do:-
+
+http://books.stuartherbert.com/putting-ansible-to-work/organising-your-ansible-files.html#:~:text=The%20group_vars%2F%20folder%20has%20to,in%20the%20inventory%2F%20folder.

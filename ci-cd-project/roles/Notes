@@ -12,8 +12,7 @@ By default, Ansible looks for roles in the following locations:
       - role: '/path/to/my/roles/common'
     ---
 
-
-choose either 2) or 4)
+I have choosen Option 4  * * *
 
 ------------------
 
@@ -31,10 +30,21 @@ Chanages made with the introduction of role structuring:-
       # remove 'files/' which was written in front of 'tomcat.service.j2'. Because, ansible is aware of 'role' structure & hence by-default knows where to look for template files.
 
 
-2) 1st task:-
+2) The 1st task in tasks/main.yml:-
       - name: include os specific variables
         include_vars: "vars/{{ ansible_facts['distribution'] }}.yml"  # --> this does the trick.
             
             # 1st Ansible picks [webubuntu] 172.31.38.155 & runs the 1st task, it reads "include_vars: vars/{{ ansible_facts['distribution'] }}.yml" & reads the current host's (172.31.38.155) distribution & looks for vars/Ubuntu.yml for this host & it follows this rule throughout this playbook for this host because of "include_vars".
 
             # In crude sense, I could say, as soon as ansible sees 'include_vars', it includes this vars ("vars/{{ ansible_facts['distribution'] }}.yml") for this host (172.31.38.155).
+
+        
+3) This change is linked to change-2:-
+      Introduction of OS specific variable files. Make sure both Ubuntu.yml & RedHat.yml have all the variables defined in them because there's no priority & these 2 files are exclusive of each other. 
+      
+      Ubuntu.yml is used when tasks are run on Ubuntu hosts. RedHat.yml is used when tasks are run on RedHat hosts. --> "include_vars" task does the trick.
+
+
+** Note:-
+In "include_vars", we have used nested variable which is ansible_facts['distribution'] - 
+We can use other nested variables as well (ex:- ansible_facts["eth0"]["ipv4"]["address"])

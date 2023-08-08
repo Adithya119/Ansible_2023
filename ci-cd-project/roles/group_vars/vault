@@ -1,0 +1,3 @@
+vault_java_package: openjdk-11-jdk
+
+# refer 'General Notes' file (section name: # Keep vaulted variables safe:-) for explaination.

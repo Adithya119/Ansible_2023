@@ -1,4 +1,4 @@
-java_package: openjdk-11-jdk
+java_package: {{ vault_java_package }}      # refer 'vault' file
 tomcat_minor_version: '9.0.78'
 tomcat_major_version: '9'
 java_home: /usr/lib/jvm/java-11-openjdk-amd64                                   # jinja

@@ -30,7 +30,7 @@ Installing lamp is not interfering with tomcat installation. Tomcat still runs o
 
 ---
 
-# Keep vaulted variables safely visible:-
+# Keep vaulted variables safe:-
 
 https://docs.ansible.com/ansible/latest/tips_tricks/ansible_tips_tricks.html#keep-vaulted-variables-safely-visible
 

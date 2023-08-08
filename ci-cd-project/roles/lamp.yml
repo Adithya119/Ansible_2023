@@ -1,0 +1,5 @@
+- name: install Lamp stack
+  hosts: all
+  become: yes
+  roles:
+  - role: Lamp-stack

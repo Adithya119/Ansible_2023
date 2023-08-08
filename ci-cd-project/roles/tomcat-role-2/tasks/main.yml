@@ -1,0 +1,98 @@
+---
+# tasks file for tomcat-role  # directly start with tasks
+
+  - name: update cache & install Java
+    package:
+      name: "{{ java_package }}"
+      state: present
+      update_cache: true
+
+  - name: create tomcat user      
+    user:
+      name: tomcat
+      home: /opt/tomcat
+      shell: /bin/flase
+
+  - name: download tomcat tar file
+    get_url:
+      url: "https://dlcdn.apache.org/tomcat/tomcat-{{ tomcat_major_version }}/v{{ tomcat_minor_version }}/bin/apache-tomcat-{{ tomcat_minor_version }}.tar.gz"
+      dest: "/tmp/apache-tomcat-{{ tomcat_minor_version }}.tar.gz"
+      
+  - name: untar the tar file
+    unarchive:
+      src: "/tmp/apache-tomcat-{{ tomcat_minor_version }}.tar.gz"
+      remote_src: true         
+      dest: /opt/tomcat
+      creates: "/opt/tomcat/apache-tomcat-{{ tomcat_minor_version }}.tar.gz"    
+
+  - name: create symlink for tomcat latest 
+    file:                                                 
+      src: "/opt/tomcat/apache-tomcat-{{ tomcat_minor_version }}"
+      dest: /opt/tomcat/latest
+      state: link
+
+  - name: make tomcat user as owner for /opt/tomcat
+    file:
+      path: /opt/tomcat/
+      recurse: true                      
+      owner: tomcat
+      group: tomcat
+      state: directory
+
+  
+  - name: find all .sh files under /opt/tomcat/latest/bin/ folder          
+    find:
+      path: /opt/tomcat/latest/bin
+      pattern: "*.sh"
+    register: output           # storing the result in a file called output
+
+  - name: set your own fact so that you can grep for files names only      
+    set_fact:
+      sh_files: "{{ output.files | map(attribute = 'path') | list }}"
+
+  - name: print the .sh file names          # not mandatory
+    debug:
+      msg: "{{ sh_files }}"
+
+  - name: give execute permission for all the .sh files      
+    file:
+      path: "{{ item }}"            # write this 2nd
+      mode: 0751
+    with_items: "{{ sh_files }}"    # write this 1st
+
+  - name: copy tomcat.service file to remote nodes
+    template:
+      src: tomcat.service.j2     # adjusting the path acc to new folder structure caused by the introduction of 'roles'.
+      dest: /etc/systemd/system/tomcat.service
+    
+  - name: restart systemd & start tomcat service       
+    systemd:
+      name: tomcat.service
+      daemon_reload: true                
+      state: started
+      enabled: true
+
+  - name: add contents to tomcat-users.xml file
+    blockinfile:
+      path: /opt/tomcat/latest/conf/tomcat-users.xml
+      block: |                                               
+        #
+           <role rolename="admin-gui"/>
+           <role rolename="manager-gui"/>
+           <user username="admin" password="password" roles="admin-gui,manager-gui"/>
+      insertbefore: </tomcat-users>                                                        
+    #notify: restart tomcat 
+
+  - name: replace a line in manager-context file
+    lineinfile:
+      path: /opt/tomcat/latest/webapps/manager/META-INF/context.xml
+      regexp: '^allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />'       
+      line: '         allow=".*" />'
+    #notify: restart tomcat
+
+  - name: replace a line in host-manager-context file
+    lineinfile:
+      path: /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
+      regexp: '^allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />'        
+      line: '         allow=".*" />'
+    notify: restart tomcat

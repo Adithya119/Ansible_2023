@@ -1,5 +1,0 @@
-- name: mysql using role (geerlingguy)
-  hosts: database
-  become: yes
-  roles:                         # not 'tasks', but 'roles'
-  - role: geerlingguy.mysql      # not 'name', but 'role'

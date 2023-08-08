@@ -1,0 +1,5 @@
+- name: Install tomcat using group_vars
+  hosts: all
+  become: yes
+  roles:
+  - role: tomcat-role-2     # give folder name of the tomcat role

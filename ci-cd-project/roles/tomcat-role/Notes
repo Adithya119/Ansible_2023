@@ -1,4 +1,4 @@
-By default, Ansible looks for roles in the following locations:
+*****  By default, Ansible looks for roles in the following locations:    *****
 
 1)    in collections, if you are using them
 2)    in a directory called roles/, relative to the playbook file
@@ -12,7 +12,7 @@ By default, Ansible looks for roles in the following locations:
       - role: '/path/to/my/roles/common'
     ---
 
-I have choosen Option 4  * * *
+*****  I have choosen Option 4  *****
 
 ------------------
 

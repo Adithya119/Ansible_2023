@@ -4,3 +4,5 @@ php_packages:
 - php
 - libapache2-mod-php
 - php-mysql
+
+# db_password: wjbdkwbxkdb   ---> this is for explaination purpose of vault. This var is not used in the play.

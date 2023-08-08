@@ -8,6 +8,16 @@ host_vars/<hostname.yml>
 
 ---
 
+Folder structure of roles:
+
+├── group_vars                  # group_vars folder. # you can also have host_vars folder. 
+├── hosts                       # inv file
+├── tomcat-role-2               # role folder
+├── tomcat.yml                  # playbook 
+
+
+---
+
 # Lamp-stack:-
 
 I have ran installed Lamp stack on both Ubuntu & Redhat servers using Lamp-stack role. I have checked the installation is successful by browsing the below:

@@ -1,0 +1,18 @@
+# this playbook runs 2 roles (tomcat & lamp)
+
+- name: Install Tomcat & Lamp using 2 different roles
+  become: yes
+  #hosts: all
+  roles:
+
+  - role: Lamp-stack
+    hosts: 
+    - db_1
+    - db_2
+
+  - role: tomcat-role-2
+    hosts:
+    - ubuntu
+    - redhat
+
+  # which hosts file to use?

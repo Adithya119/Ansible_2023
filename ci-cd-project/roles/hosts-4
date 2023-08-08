@@ -1,0 +1,14 @@
+# this is for tomcat-lamp.yml
+
+[db_1]    # ubuntu vm
+172.31.38.155
+
+[db_2]    # redhat vm
+172.31.45.220
+
+
+[ubuntu]
+172.31.38.155
+
+[redhat]
+172.31.45.220

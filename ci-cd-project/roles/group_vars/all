@@ -1,0 +1,3 @@
+# the vars defined here can be overriden by group_vars/<groupname> file & host_vars/<hostname> file
+
+php_path: /var/www/html/info.php     # this var is used for Lamp-stack role

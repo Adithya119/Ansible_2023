@@ -1,2 +1,32 @@
----
-# tasks file for Lamp-stack
+ 
+- name: install lamp stack on Ubuntu & RedHat servers
+  hosts: all
+  become: yes
+  tasks:
+  - name: install apache2/httpd
+    package:               
+      name: "{{ package_name }}"
+      state: present
+      update_cache: true                                            
+
+  - name: install php packages
+    package:
+      name: "{{ php_packages }}"
+      state: present
+
+  - name: start & enable httpd
+    service:
+      name: "{{ package_name }}"
+      state: started  
+      enabled: true
+    when: ansible_facts['distribution'] == 'RedHat'     
+  
+  - name: create info.php             
+    copy:
+      dest: "{{ php_path }}"   
+      content: |
+        <?php
+        phpinfo();
+        ?>
+    notify:
+    - restart apache2/httpd      

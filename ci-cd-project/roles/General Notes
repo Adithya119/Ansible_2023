@@ -1,0 +1,7 @@
+Ansible looks for and loads all of these files in order:
+
+group_vars/all.yml       # .yml extension is optional
+group_vars/<group.yml>
+host_vars/<hostname.yml>
+
+# The contents of the files are merged together. This allows the 'group.yml' files to override the 'all.yml' file, and for the 'hostname.yml' file to override both of them.

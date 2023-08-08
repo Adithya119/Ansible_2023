@@ -1,0 +1,11 @@
+# this inv file is for Lamp-stack role
+
+[db_1]    # ubuntu vm
+172.31.38.155
+
+[db_2]    # redhat vm
+172.31.45.220
+
+
+# make sure the group names match the group_vars/<filename>
+   # ex:- the name [db_1] above should match group_vars/db-1 file name

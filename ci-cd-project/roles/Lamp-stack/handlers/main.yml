@@ -1,2 +1,5 @@
----
-# handlers file for Lamp-stack
+                     
+  - name: restart apache2/httpd
+    service:
+      name: "{{ package_name }}"
+      state: restarted

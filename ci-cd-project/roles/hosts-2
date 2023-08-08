@@ -1,5 +1,10 @@
+# this inv file is for tomcat-role-2 role
+
 [ubuntu]
 172.31.38.155
 
 [redhat]
 172.31.45.220
+
+# make sure the group names match the group_vars/<filename>
+   # ex:- the name [ubuntu] above should match group_vars/ubuntu file name

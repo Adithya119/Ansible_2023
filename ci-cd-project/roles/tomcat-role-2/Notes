@@ -1,0 +1,32 @@
+# tomcat-role-2 uses group_vars folder for variables. That's the only change done in this fodler.
+# group_vars/ folder is stored outside this role because Ansible will look for group_vars/ in the same folder that your playbook (tomcat-2.yml) is in.
+
+
+---
+
+# Files & Folders needed for tomcat-role-2:-
+   # ( note that group_vars, inv file, playbook & the role folder should be in same folder level for Ansible to look at group_vars/)
+
+
+├── group_vars                  # group_vars folder. # you can also have host_vars folder.
+│   ├── redhat
+│   └── ubuntu
+├── hosts-2                     # inv file
+├── tomcat-2.yml                # playbook
+├── tomcat-role-2               # role folder
+│   ├── README.md
+│   ├── defaults
+│   │   └── main.yml
+│   ├── handlers
+│   │   └── main.yml
+│   ├── meta
+│   │   └── main.yml
+│   ├── tasks
+│   │   └── main.yml
+│   ├── templates
+│   │   └── tomcat.service.j2
+│   ├── tests
+│   │   ├── inventory
+│   │   └── test.yml
+│   └── vars
+│       └── main.yml

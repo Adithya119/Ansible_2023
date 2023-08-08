@@ -2,7 +2,7 @@
 
 - name: Install Tomcat & Lamp using 2 different roles
   become: yes
-  #hosts: all
+  hosts: all    # this field is mandatory even if you have set role level hosts field below
   roles:
 
   - role: Lamp-stack

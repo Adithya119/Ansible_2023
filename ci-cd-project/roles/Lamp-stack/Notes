@@ -5,7 +5,18 @@
 
 # you need to encrypt files which store sensitive data (ex:- db_password)
 
-# refer blog for commands
+# commands used to encrypt that file:- (run these commands inside the server)
+1) ansible-vault encrypt group_vars/db_1
+2) git add .                 # commands 2, 3 & 4 are required because git is considering encryption also as a change because checksum of that file is changing with encryption. (sha1sum <filename>)
+3) git commit -m "encrypted db_1 file using ansible-vault"
+4) git push origin master     # & pull it to your vscode
+5) ansible-playbook -i hosts-3 lamp.yml --ask-vault-pass
+
+# the main commands are 1) & 5)
+# the 5th command will ask for vault pass which is adithya.
+
+# refer blog for few more commands.
+
 
 ---
 

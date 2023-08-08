@@ -1,8 +1,4 @@
- 
-- name: install lamp stack on Ubuntu & RedHat servers
-  hosts: all
-  become: yes
-  tasks:
+
   - name: install apache2/httpd
     package:               
       name: "{{ package_name }}"

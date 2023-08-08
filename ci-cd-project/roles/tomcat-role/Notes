@@ -1,3 +1,7 @@
+*****  This role uses jinja  *****
+
+---
+
 *****  By default, Ansible looks for roles in the following locations:    *****
 
 1)    in collections, if you are using them

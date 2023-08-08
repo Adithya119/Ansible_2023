@@ -1,18 +1,21 @@
 # this playbook runs 2 roles (tomcat & lamp)
+#                     ---------->                     ansible-playbook -i hosts-4 tomcat-lamp.yml     <----------
+
+
 
 - name: Install Tomcat & Lamp using 2 different roles
   become: yes
-  hosts: all    # this field is mandatory even if you have set role level hosts field below
+  hosts: all          # this field is mandatory even if you have set role level hosts field below. 
   roles:
 
-  - role: Lamp-stack
-    hosts: 
+  - role: Lamp-stack         # this role will run only on ip's mentioned under db_1 & db_2 groups of 'hosts-4' inv file
+    hosts:                     # role level hosts fields override this global level hosts field's value
     - db_1
     - db_2
 
-  - role: tomcat-role-2
+  - role: tomcat-role-2      # this role will run only on ip's mentioned under ubuntu & redhat groups of 'hosts-4' inv file
     hosts:
     - ubuntu
     - redhat
 
-  # which hosts file to use?
+  # 'hosts-4' inv file has all the ip's required for these 2 roles. ip's are categorized by group names (all, db_1, db_2, ubuntu & redhat). I have tested & having 1 inv file is working.

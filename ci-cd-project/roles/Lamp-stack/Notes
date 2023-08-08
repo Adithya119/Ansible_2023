@@ -1,6 +1,9 @@
 
 # In Lamp-stack, we have used group_vars/all, group_vars/db_1, group_vars/db_2 & hosts-3 files
 
+# In Lamp-stack, we have used ansible-vault concept. The file 'db_1' has been encypted using vault (vault password: adithya)
+
+# you need to encrypt files which store sensitive data (ex:- db_password)
 
 ---
 

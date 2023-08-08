@@ -1,4 +1,4 @@
-# tomcat-role-2 uses group_vars folder for variables. That's the only change done in this fodler.
+# tomcat-role-2 uses group_vars folder for variables. remove the include_vars task in tasks/main.yml. These are the only changes done in this fodler.
 # group_vars/ folder is stored outside this role because Ansible will look for group_vars/ in the same folder that your playbook (tomcat-2.yml) is in.
 
 

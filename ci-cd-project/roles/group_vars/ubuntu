@@ -1,6 +1,6 @@
 java_package: openjdk-11-jdk
-tomcat_minor_version: '10.1.11'
-tomcat_major_version: '10'
+tomcat_minor_version: '9.0.78'
+tomcat_major_version: '9'
 java_home: /usr/lib/jvm/java-11-openjdk-amd64                                   # jinja
 java_opts: -Djava.security.egd=file:///dev/urandom -Djava.awt.headless=true     # jinja
 
@@ -9,3 +9,4 @@ java_opts: -Djava.security.egd=file:///dev/urandom -Djava.awt.headless=true     
 # https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.11/bin/apache-tomcat-10.1.11.tar.gz
 
 # 9.0.78
+# 10.1.11

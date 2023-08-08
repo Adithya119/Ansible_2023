@@ -5,6 +5,8 @@
 
 # you need to encrypt files which store sensitive data (ex:- db_password)
 
+# refer blog for commands
+
 ---
 
 # for RedHat, you should start and enable the installed services first. Using Conditionals: -

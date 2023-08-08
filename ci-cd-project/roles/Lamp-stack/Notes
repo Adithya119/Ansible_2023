@@ -13,7 +13,7 @@
 5) ansible-playbook -i hosts-3 lamp.yml --ask-vault-pass
 
 # the main commands are 1) & 5)
-# the 5th command will ask for vault pass which is adithya.
+# the 5th command will ask for vault pass which is adithya. After entering the pass, it will run the playbook.
 
 # refer blog for few more commands.
 

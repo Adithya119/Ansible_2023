@@ -5,3 +5,29 @@ group_vars/<group.yml>
 host_vars/<hostname.yml>
 
 # The contents of the files are merged together. This allows the 'group.yml' files to override the 'all.yml' file, and for the 'hostname.yml' file to override both of them.
+
+---
+
+# Lamp-stack:-
+
+I have ran installed Lamp stack on both Ubuntu & Redhat servers using Lamp-stack role. I have checked the installation is successful by browsing the below:
+
+http://<publicip>
+http://<publicip>/info.php
+
+Installing lamp is not interfering with tomcat installation. Tomcat still runs on both servers & is accessible via http://<publicip>:8080
+
+
+---
+
+# Keep vaulted variables safely visible:-
+
+https://docs.ansible.com/ansible/latest/tips_tricks/ansible_tips_tricks.html#keep-vaulted-variables-safely-visible
+
+1) Create a group_vars/ subdirectory named after the group.
+2) Inside this subdirectory, create two files named vars and vault.
+3) In the vars file, define all of the variables needed, including any sensitive ones.
+4) Copy all of the sensitive variables over to the vault file and prefix these variables with vault_.
+5) Adjust the variables in the vars file to point to the matching vault_ variables using jinja2 syntax: db_password: {{ vault_db_password }}.
+6) Encrypt the vault file to protect its contents.
+7) Use the variable name from the vars file in your playbooks.

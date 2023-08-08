@@ -1,5 +1,5 @@
 
-# In Lamp-stack, we have used group_vars/all, group_vars/db_1 & group_vars/db_2 files
+# In Lamp-stack, we have used group_vars/all, group_vars/db_1, group_vars/db_2 & hosts-3 files
 
 
 ---

@@ -30,4 +30,4 @@ Installing lamp is not interfering with tomcat installation. Tomcat still runs o
 
 ---
 
-You can multiples roles at once by running 1 playbook. Refer tomcat-lamp.yml
+You can run multiples roles by running 1 playbook. Refer tomcat-lamp.yml

@@ -62,7 +62,7 @@
     with_items: "{{ sh_files }}"    # write this 1st
 
   - name: copy tomcat.service file to remote nodes
-    template:
+    template:                                         # didn't use copy module. Refer Notes for the reason.
       src: templates/tomcat.service.j2
       dest: /etc/systemd/system/tomcat.service
     

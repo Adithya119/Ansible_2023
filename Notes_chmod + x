@@ -1,0 +1,6 @@
+to give +x permissions to all .sh files, run this script:
+
+for var in $(ls -lh | find -type f -name "*.sh" | awk -F'/' '{print $2}')
+do
+chmod +x $var
+done
